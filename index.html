@@ -1,0 +1,3711 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>顶部导航 + 左侧菜单 · 订单管理</title>
+  <!-- Font Awesome 5 免费图标库 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    /* ... 样式保持不变，与之前相同 ... */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+      background: #f4f7fc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---------- 顶部导航 ---------- */
+    .navbar {
+      height: 104px;
+      background-color: #055AA1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
+    .navbar-logo img {
+      display: block;
+      max-height: 106px;
+      width: auto;
+      object-fit: contain;
+    }
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      height: 100%;
+    }
+    .nav-tabs {
+      display: flex;
+      align-items: center;
+      list-style: none;
+      gap: 28px;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-tabs li {
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
+    .nav-tabs li a {
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      color: #ffffff;
+      letter-spacing: 0.3px;
+      transition: color 0.2s ease;
+      outline: none;
+      user-select: none;
+      cursor: default;
+      padding: 6px 0;
+      border-bottom: 2px solid transparent;
+      line-height: 1.2;
+    }
+    .nav-tabs li a.active {
+      color: #ACC83E;
+    }
+    .nav-tabs li a:hover {
+      color: #ACC83E;
+    }
+
+    .notification-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #ffffff;
+      transition: color 0.2s ease;
+      cursor: default;
+      width: 20px;
+      height: 20px;
+      text-decoration: none;
+    }
+    .notification-icon i {
+      font-size: 18px;
+    }
+    .notification-icon:hover {
+      color: #ACC83E;
+    }
+
+    .lang-dropdown {
+      position: relative;
+      display: inline-block;
+      cursor: default;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+    .lang-trigger {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #ffffff;
+      font-size: 16px;
+      transition: color 0.2s ease;
+      padding: 4px 0;
+      cursor: default;
+      user-select: none;
+    }
+    .lang-trigger i {
+      font-size: 16px;
+      margin-right: 2px;
+    }
+    .lang-dropdown:hover .lang-trigger {
+      color: #ACC83E;
+    }
+    .lang-dropdown-menu {
+      position: absolute;
+      top: calc(70% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      min-width: 120px;
+      padding: 8px 0;
+      list-style: none;
+      margin: 0;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+      z-index: 100;
+      text-align: center;
+    }
+    .lang-dropdown-menu li {
+      padding: 8px 20px;
+      font-size: 16px;
+      color: #1e2a3a;
+      transition: color 0.2s ease;
+      cursor: default;
+      white-space: nowrap;
+    }
+    .lang-dropdown-menu li:hover {
+      color: #ACC83E;
+    }
+    .lang-dropdown:hover .lang-dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+    }
+    .lang-dropdown-menu::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 6px solid #ffffff;
+    }
+
+    .profile-dropdown {
+      position: relative;
+      display: inline-block;
+      cursor: default;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+    .profile-trigger {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #ffffff;
+      font-size: 16px;
+      transition: color 0.2s ease;
+      padding: 4px 0;
+      cursor: default;
+      user-select: none;
+    }
+    .profile-trigger i {
+      font-size: 16px;
+    }
+    .profile-trigger .phone-number {
+      font-weight: 400;
+      letter-spacing: 0.3px;
+    }
+    .profile-dropdown:hover .profile-trigger {
+      color: #ACC83E;
+    }
+    .profile-dropdown-menu {
+      position: absolute;
+      top: calc(70% + 8px);
+      right: 0;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      min-width: 150px;
+      padding: 8px 0;
+      list-style: none;
+      margin: 0;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+      z-index: 100;
+      text-align: left;
+    }
+    .profile-dropdown-menu li {
+      padding: 8px 20px;
+      font-size: 16px;
+      color: #1e2a3a;
+      transition: color 0.2s ease;
+      cursor: default;
+      white-space: nowrap;
+    }
+    .profile-dropdown-menu li:hover {
+      color: #ACC83E;
+    }
+    .profile-dropdown:hover .profile-dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+    }
+    .profile-dropdown-menu::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      right: 20px;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 6px solid #ffffff;
+    }
+
+    /* ---------- 下方色块 ---------- */
+    .sub-bar {
+      height: 24px;
+      background-color: #ACC83E;
+      display: flex;
+      align-items: center;
+      padding-left: 0px;
+      flex-shrink: 0;
+    }
+    .sub-bar img {
+      display: block;
+      height: 16px;
+      width: 158px;
+      background-color: rgba(255, 255, 255, 0.35);
+      border-radius: 2px;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
+      flex-shrink: 0;
+    }
+
+    /* ---------- 主体布局 ---------- */
+    .app-wrapper {
+      display: flex;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* ---------- 左侧导航 (250px, bg #055AA1) ---------- */
+    .sidebar {
+      width: 250px;
+      background-color: #055AA1;
+      flex-shrink: 0;
+      padding: 12px 0 20px 5px;
+      overflow-y: auto;
+      border-right: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .menu-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    /* ----- 一级菜单 (240*40) ----- */
+    .menu-item {
+      width: 240px;
+      min-height: 40px;
+      background-color: #055AA1;
+      border-radius: 8px;
+      transition: background-color 0.15s ease;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      cursor: default;
+      user-select: none;
+      position: relative;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 400;
+    }
+    .menu-item:hover {
+      background-color: #ACC83E;
+    }
+    .menu-item.selectable.active {
+      background-color: #ACC83E;
+    }
+    .menu-item.selectable.active .menu-icon,
+    .menu-item.selectable.active .menu-label,
+    .menu-item.selectable.active .menu-arrow {
+      color: #ffffff;
+    }
+    .menu-item.has-sub {
+      /* 无 active 样式 */
+    }
+    .menu-item.has-sub:hover {
+      background-color: #ACC83E;
+    }
+
+    .menu-item .menu-icon {
+      width: 20px;
+      text-align: center;
+      margin-right: 10px;
+      font-size: 14px;
+      color: #ffffff;
+      flex-shrink: 0;
+    }
+    .menu-item .menu-label {
+      flex: 1;
+      color: #ffffff;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    .menu-item:hover .menu-icon,
+    .menu-item:hover .menu-label {
+      color: #ffffff;
+    }
+
+    .menu-arrow {
+      margin-left: auto;
+      font-size: 12px;
+      color: #ffffff;
+      flex-shrink: 0;
+      width: 16px;
+      text-align: center;
+    }
+    .menu-item.no-arrow .menu-arrow {
+      visibility: hidden;
+    }
+
+    /* ----- 二级菜单 ----- */
+    .sub-menu-wrapper {
+      position: relative;
+      padding-left: 0;
+    }
+
+    .sub-menu-wrapper::before {
+      content: '';
+      position: absolute;
+      left: 22px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background-color: rgba(255, 255, 255, 0.7);
+      pointer-events: none;
+      border-radius: 1px;
+    }
+
+    .sub-menu {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      padding-left: 42px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      background-color: transparent;
+      margin-top: 4px;
+    }
+
+    .sub-menu-item {
+      width: 190px;
+      min-height: 38px;
+      height: 38px;
+      background-color: #055AA1;
+      border-radius: 8px;
+      transition: background-color 0.15s ease;
+      display: flex;
+      align-items: center;
+      cursor: default;
+      user-select: none;
+      color: #ffffff;
+      font-size: 14px;
+      position: relative;
+      margin-left: -8px;
+      padding-left: 8px;
+    }
+    .sub-menu-item:hover {
+      background-color: #ACC83E;
+    }
+    .sub-menu-item.active {
+      background-color: #ACC83E;
+    }
+    .sub-menu-item.active .sub-label {
+      color: #ffffff;
+    }
+
+    .sub-menu-item .sub-label {
+      color: #ffffff;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+    }
+    .sub-menu-item:hover .sub-label {
+      color: #ffffff;
+    }
+
+    /* ---------- 右侧主内容 ---------- */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #f0f4fa;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .tab-bar {
+      height: 44px;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      border-bottom: 1px solid #e6edf4;
+      flex-shrink: 0;
+      overflow-x: auto;
+      gap: 2px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    }
+    .tab-item {
+      display: inline-flex;
+      align-items: center;
+      height: 100%;
+      padding: 0 12px;
+      font-size: 13px;
+      color: #1e2a3a;
+      background: transparent;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      cursor: default;
+      user-select: none;
+      transition: border-color 0.15s ease, color 0.15s ease;
+      position: relative;
+      gap: 8px;
+    }
+    .tab-item.active {
+      border-bottom-color: #055AA1;
+      color: #055AA1;
+      font-weight: 500;
+    }
+    .tab-item .tab-close {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #8c9aa8;
+      cursor: default;
+      transition: background 0.15s ease, color 0.15s ease;
+      margin-left: 4px;
+    }
+    .tab-item .tab-close:hover {
+      background: #eef3f8;
+      color: #1e2a3a;
+    }
+    .tab-item .tab-close i {
+      font-size: 12px;
+      pointer-events: none;
+    }
+    .tab-item.home-tab .tab-close {
+      display: none;
+    }
+
+    /* ============================================================
+       内容区域 - 内边距 16px
+       ============================================================ */
+    .tab-content-area {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      background: #ffffff;
+      color: #1e2a3a;
+    }
+
+    /* ========== 订单管理搜索组件样式（修改版） ========== */
+    .search-card {
+    
+    }
+
+    .search-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 16px 24px;
+    }
+
+    .search-fields {
+      flex: 1 1 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 16px 24px;
+      min-width: 0;
+    }
+
+    .date-field-row {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .date-field-row .date-range-wrapper {
+      width: 260px;
+      min-width: 260px;
+    }
+    .date-field-row .field-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .date-field-row .field-actions .btn {
+      width: 60px;
+      height: 36px;
+      padding: 0;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 140px;
+      flex: 0 1 auto;
+    }
+    .field-group label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #4a5363;
+    }
+
+    .field-group.wide {
+      flex: 0 1 380px;
+      min-width: 160px;
+      max-width: 380px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 9px 14px;
+      border: 1px solid #cbd0d9;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      background: white;
+      outline: none;
+      transition: border 0.2s, box-shadow 0.2s;
+      color: #1a2232;
+    }
+    .input-field:focus {
+      border-color: #055AA1;
+      box-shadow: 0 0 0 3px rgba(5, 90, 161, 0.10);
+    }
+    textarea.input-field {
+      min-height: 112px;
+      resize: vertical;
+    }
+
+    .date-range-wrapper {
+      position: relative;
+      width: 260px;
+      min-width: 260px;
+    }
+    .date-range-display {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 0 36px 0 10px;
+      border: 1px solid #cbd0d9;
+      border-radius: 8px;
+      background: white;
+      height: 36px;
+      font-size: 14px;
+      color: #9aa1ad;
+      cursor: pointer;
+      outline: none;
+      transition: border 0.2s, box-shadow 0.2s;
+      position: relative;
+      width: 100%;
+      white-space: nowrap;
+    }
+    .date-range-display.has-date { color: #1a2232; }
+    .date-range-display.active {
+      border-color: #055AA1;
+      box-shadow: 0 0 0 3px rgba(5, 90, 161, 0.10);
+    }
+    .date-range-display .range-icon {
+      color: #9aa1ad;
+      font-size: 15px;
+      margin-right: 8px;
+      flex-shrink: 0;
+      pointer-events: none;
+    }
+    .date-range-display .clear-icon {
+      position: absolute;
+      right: 10px;
+      color: #9aa1ad;
+      font-size: 13px;
+      cursor: pointer;
+      display: none;
+      line-height: 1;
+    }
+    .date-range-display.has-date .clear-icon { display: inline-block; }
+    .date-range-display .clear-icon:hover { color: #055AA1; }
+    .date-range-panel {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      width: 520px;
+      background: white;
+      border: 1px solid #e2e6ec;
+      border-radius: 12px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.10);
+      padding: 18px 20px 20px;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-4px) scale(0.96);
+      transition: opacity 0.2s, transform 0.2s, visibility 0s 0.2s;
+    }
+    .date-range-panel.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+    /* ====== 异常原因多选下拉 ====== */
+    .multi-select-wrapper {
+      position: relative;
+      width: 260px;
+      min-width: 260px;
+    }
+    /* 查询/重置 紧跟在制单日期后面（同一行） */
+    .date-row-inline {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .date-row-inline .field-actions {
+      margin-top: 0;
+      flex-shrink: 0;
+    }
+    /* 异常原因：独占一行，保留标题 */
+    .reason-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 12px;
+    }
+    .reason-field label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #4a5363;
+    }
+    .multi-select-display {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 30px 0 10px;
+      border: 1px solid #cbd0d9;
+      border-radius: 8px;
+      background: white;
+      height: 36px;
+      font-size: 14px;
+      color: #9aa1ad;
+      cursor: pointer;
+      outline: none;
+      transition: border 0.2s, box-shadow 0.2s;
+      position: relative;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .multi-select-display.has-value { color: #1a2232; }
+    .multi-select-display.active {
+      border-color: #055AA1;
+      box-shadow: 0 0 0 3px rgba(5, 90, 161, 0.10);
+    }
+    .multi-select-display .ms-text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .multi-select-display .ms-arrow {
+      position: absolute;
+      right: 10px;
+      color: #9aa1ad;
+      font-size: 12px;
+      transition: transform 0.2s;
+    }
+    .multi-select-display.active .ms-arrow { transform: rotate(180deg); }
+    .multi-select-panel {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      width: 100%;
+      min-width: 220px;
+      background: white;
+      border: 1px solid #e2e6ec;
+      border-radius: 10px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.10);
+      padding: 10px 12px;
+      box-sizing: border-box;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-4px);
+      transition: opacity 0.2s, transform 0.2s, visibility 0s 0.2s;
+    }
+    .multi-select-panel.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .multi-select-panel .ms-actions {
+      display: flex;
+      gap: 12px;
+      padding-bottom: 8px;
+      margin-bottom: 6px;
+      border-bottom: 1px solid #eef1f5;
+    }
+    .multi-select-panel .ms-link {
+      font-size: 13px;
+      color: #055AA1;
+      cursor: pointer;
+      user-select: none;
+    }
+    .multi-select-panel .ms-options {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-height: 220px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .multi-select-panel .ms-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: #1a2232;
+      cursor: pointer;
+      padding: 4px 2px;
+      border-radius: 6px;
+    }
+    .multi-select-panel .ms-option:hover { background: #f5f9fd; }
+    /* 隐藏单选图标，用整行高亮表示选中 */
+    .multi-select-panel .ms-option input {
+      display: none;
+    }
+    .multi-select-panel .ms-option.active {
+      background: rgba(5, 90, 161, 0.08);
+      color: #055AA1;
+      font-weight: 500;
+    }
+    .dp-months { display: flex; gap: 20px; }
+    .dp-month { flex: 1; }
+    .dp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      font-weight: 500;
+    }
+    .dp-header .dp-nav {
+      background: transparent;
+      border: none;
+      font-size: 16px;
+      color: #6f7887;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    .dp-header .dp-nav:hover { background: #f0f4fa; color: #055AA1; }
+    .dp-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: #9aa1ad;
+      margin-bottom: 6px;
+    }
+    .dp-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+    }
+    .dp-day {
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.15s;
+      color: #1a2232;
+    }
+    .dp-day:hover { background: #f0f4fa; }
+    .dp-day.selected {
+      background: #055AA1;
+      color: white;
+      font-weight: 500;
+    }
+    .dp-day.other-month { color: #cbd0d9; }
+    .dp-day.in-range {
+      background: rgba(5, 90, 161, 0.10);
+      border-radius: 0;
+    }
+
+    .btn {
+      padding: 9px 20px;
+      border-radius: 8px;
+      border: 1px solid #cbd0d9;
+      background: white;
+      font-size: 14px;
+      font-weight: 500;
+      color: #4a5363;
+      cursor: pointer;
+      transition: 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+      white-space: nowrap;
+      height: 40px;
+    }
+    .btn-primary {
+      background: #055AA1;
+      border-color: #055AA1;
+      color: white;
+    }
+    .btn-primary:hover { background: #043f73; border-color: #043f73; }
+    .btn:hover { border-color: #055AA1; color: #055AA1; }
+    .btn-primary:hover { color: white; }
+
+    /* ====== 表格组件样式（从表格.html 移植） ====== */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid #e2e6ec;
+    }
+    .table-wrap table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .table-wrap th {
+      background: #f9fafc;
+      color: #4a5363;
+      font-weight: 600;
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid #e2e6ec;
+      white-space: nowrap;
+      height: 40px;
+    }
+    .table-wrap td {
+      padding: 6px 12px;
+      border-bottom: 1px solid #e2e6ec;
+      color: #1a2232;
+      vertical-align: middle;
+      height: 40px;
+      white-space: nowrap;
+    }
+    .table-wrap tr:last-child td { border-bottom: none; }
+    .table-wrap tr:hover td { background: #fafcff; }
+    /* 固定右侧操作列（横向滚动时保持可见） */
+    .table-wrap th.sticky-right-head {
+      position: sticky;
+      right: 0;
+      z-index: 3;
+      width: 150px;
+      min-width: 150px;
+    }
+    .table-wrap td.sticky-right-cell {
+      position: sticky;
+      right: 0;
+      z-index: 2;
+      background: #fff;
+      box-shadow: -1px 0 0 #e2e6ec;
+      width: 150px;
+      min-width: 150px;
+    }
+    .table-wrap tr:hover td.sticky-right-cell { background: #fafcff; }
+    /* 表头排序（异常原因/制单日期/创建时间/截止时间） */
+    .table-wrap th.sortable {
+      cursor: pointer;
+      user-select: none;
+    }
+    .table-wrap th.sortable:hover { color: #055AA1 !important; }
+    .table-wrap th .sort-icon {
+      margin-left: 6px;
+      font-size: 12px;
+      color: #c3c9d4;
+    }
+    .table-wrap th.sortable.sorted { color: #055AA1 !important; }
+    .table-wrap th.sortable.sorted .sort-icon { color: #055AA1; }
+    .order-tab-bar {
+      display: flex;
+      align-items: flex-end;
+      margin-bottom: 8px;
+      margin-top: 16px;
+      padding-bottom: 0;
+      flex-wrap: wrap;
+    }
+    /* 横线只覆盖 tab 区域（全部+待处理+...），不延伸到批量操作区域 */
+    .order-tabs {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      border-bottom: 1px solid #e2e6ec;
+    }
+    .order-tab-item {
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #6f7887;
+      cursor: pointer;
+      transition: 0.15s;
+      border-radius: 6px 6px 0 0;
+      background: transparent;
+      border: none;
+      white-space: nowrap;
+      position: relative;
+    }
+    .order-tab-item .tab-text {
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+    /* 下划线覆盖整个 tab 按钮（含左右内边距），与按钮同宽 */
+    .order-tab-item::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 2px;
+      background: transparent;
+      border-radius: 2px;
+    }
+    .order-tab-item:hover { color: #1a2232; background: #f0f4fa; }
+    .order-tab-item.active {
+      color: #055AA1;
+      background: rgba(5, 90, 161, 0.06);
+    }
+    .order-tab-item.active::after {
+      background: #055AA1;
+    }
+    .order-tab-item .tab-count {
+      color: #9aa1ad;
+      font-weight: 400;
+    }
+    .order-tab-actions {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 0 8px 12px;
+      flex-shrink: 0;
+    }
+    .order-io-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      font-size: 13px;
+      color: #1a2232;
+      background: #fff;
+      border: 1px solid #e2e6ec;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.15s;
+      white-space: nowrap;
+    }
+    .order-io-btn i {
+      font-size: 13px;
+      color: #055AA1;
+    }
+    .order-io-btn:hover {
+      border-color: #055AA1;
+      color: #055AA1;
+      background: #f5f9fd;
+    }
+    .order-batch-actions {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+      padding: 0 0 8px 12px;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .status-badge.active { background: #e6f7e6; color: #0b7a3d; }
+    .status-badge.pending { background: #fff3e0; color: #b7650a; }
+    .status-badge.inactive { background: #f0f2f5; color: #6f7887; }
+    .status-badge.danger { background: #fee9e7; color: #b91c1c; }
+
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: #f0f2f5;
+      color: #4a5363;
+      font-size: 13px;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .action-btn i { font-size: 13px; }
+    .action-btn.primary { background: rgba(5, 90, 161, 0.12); color: #055AA1; }
+    .action-btn.text { width: auto; height: auto; border-radius: 4px; padding: 4px 2px; background: transparent; color: #055AA1; font-size: 14px; }
+    .action-btn:hover { opacity: 0.7; }
+
+    .pagination-container {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      font-size: 13px;
+      color: #4a5363;
+      flex-wrap: wrap;
+      padding-top: 14px;
+      margin-top: 12px;
+    }
+    .pagination-container .page-btns {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .pagination-container .page-btn {
+      min-width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      border: 1px solid #e2e6ec;
+      background: white;
+      color: #4a5363;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.15s;
+      font-size: 13px;
+      padding: 0 6px;
+    }
+    .pagination-container .page-btn:hover { border-color: #055AA1; color: #055AA1; }
+    .pagination-container .page-btn.active {
+      background: #055AA1;
+      border-color: #055AA1;
+      color: white;
+    }
+    .pagination-container .page-btn.disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .pagination-container .page-info {
+      color: #9aa1ad;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .pagination-container .page-size-select {
+      padding: 4px 8px;
+      border: 1px solid #e2e6ec;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: inherit;
+      background: white;
+      color: #4a5363;
+      cursor: pointer;
+      outline: none;
+    }
+    .pagination-container .page-size-select:focus { border-color: #055AA1; }
+    .pagination-container .goto-wrap {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .pagination-container .goto-wrap input {
+      width: 48px;
+      padding: 4px 6px;
+      border: 1px solid #e2e6ec;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: inherit;
+      text-align: center;
+      outline: none;
+    }
+    .pagination-container .goto-wrap input:focus { border-color: #055AA1; }
+    .pagination-container .goto-wrap .goto-btn {
+      padding: 4px 10px;
+      border: 1px solid #e2e6ec;
+      border-radius: 6px;
+      background: white;
+      font-size: 13px;
+      color: #4a5363;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .pagination-container .goto-wrap .goto-btn:hover {
+      border-color: #055AA1;
+      color: #055AA1;
+    }
+
+    .table-section {
+     
+    }
+
+    /* ====== 图片预览弹窗 ====== */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      max-width: 600px;
+      width: 100%;
+      padding: 16px 24px 16px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.2);
+      position: relative;
+      margin: auto;
+    }
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      background: transparent;
+      border: none;
+      font-size: 22px;
+      color: #9aa1ad;
+      cursor: pointer;
+      transition: 0.15s;
+      z-index: 10;
+    }
+    .modal-close:hover { color: #1a2232; }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-right: 36px;
+    }
+    .modal-header i {
+      font-size: 18px;
+      color: #055AA1;
+    }
+    .modal-header h2 {
+      font-size: 17px;
+      font-weight: 600;
+      color: #1a2232;
+      margin: 0;
+    }
+    .modal-images {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 0 0 10px;
+    }
+    .modal-img-main {
+      flex: 1;
+      min-height: 280px;
+      max-height: 420px;
+      border-radius: 10px;
+      background: #f5f7fb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .modal-img-main img {
+      width: 100%;
+      height: 100%;
+      max-height: 420px;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+    .modal-nav {
+      background: rgba(240, 242, 245, 0.9);
+      border: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      font-size: 16px;
+      color: #4a5363;
+      cursor: pointer;
+      transition: 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .modal-nav:hover { background: #055AA1; color: white; }
+    .modal-nav:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    .modal-thumbnails {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .modal-thumb {
+      width: 56px;
+      height: 56px;
+      border-radius: 6px;
+      object-fit: cover;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f0f4fa;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .modal-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .modal-thumb.active {
+      border-color: #055AA1;
+      box-shadow: 0 0 0 2px rgba(5, 90, 161, 0.15);
+    }
+    .modal-thumb:hover { opacity: 0.8; transform: scale(1.03); }
+    .modal-counter {
+      text-align: center;
+      font-size: 13px;
+      color: #9aa1ad;
+      margin-top: 8px;
+      font-weight: 500;
+    }
+
+    /* ====== 提供解决方案弹窗 ====== */
+    .solution-modal {
+      width: 70vw;
+      max-width: 70vw;
+      height: 70vh;
+      border-radius: 16px;
+      padding: 18px 24px 16px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.2);
+      animation: solutionZoomIn 0.22s ease both;
+    }
+    @keyframes solutionZoomIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .solution-body {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .solution-modal .modal-header { flex: 0 0 auto; }
+    .solution-footer { flex: 0 0 auto; }
+    .solution-modal .modal-header {
+      justify-content: center;
+      padding-right: 0;
+    }
+    .solution-modal .modal-header h2 {
+      font-size: 16px;
+    }
+    .solution-section { margin-bottom: 16px; }
+    /* 新地址重派时长表单：异常单信息 + 解决方案选项固定，仅下方详情面板滚动 */
+    .modal-overlay.scroll-split .solution-body {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      padding-right: 4px;
+    }
+    .modal-overlay.scroll-split .solution-body > .solution-section:first-child {
+      flex: 0 0 auto;
+    }
+    .modal-overlay.scroll-split .solution-body > .solution-section:nth-child(2) {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .modal-overlay.scroll-split .solution-body > .solution-section:nth-child(2) .solution-section-title,
+    .modal-overlay.scroll-split .solution-body > .solution-section:nth-child(2) .solution-options {
+      flex: 0 0 auto;
+    }
+    .modal-overlay.scroll-split .solution-panels {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+    .solution-section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a2232;
+      margin-bottom: 8px;
+      padding-left: 8px;
+      line-height: 1.4;
+    }
+    .solution-info {
+      background: #f7f9fc;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 14px;
+    }
+    .solution-info-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0 20px;
+    }
+    .solution-info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 13px;
+      line-height: 1.5;
+      min-width: 0;
+      padding: 6px 0;
+    }
+    .solution-info-item:last-child { border-bottom: none; }
+    .solution-info-item .solution-label {
+      color: #8a93a3;
+      font-size: 12px;
+    }
+    .solution-info-item .solution-value {
+      color: #1a2232;
+      font-weight: 500;
+      word-break: break-word;
+    }
+    .solution-info-pair {
+      display: flex;
+      gap: 20px;
+    }
+    .solution-pair-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      flex: 1;
+      min-width: 0;
+      padding: 5px 0;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .solution-pair-item .solution-label { flex-shrink: 0; }
+    .solution-pair-item .solution-value { flex: 1; min-width: 0; }
+    .solution-label {
+      color: #6f7887;
+      width: 64px;
+      flex-shrink: 0;
+    }
+    .solution-value {
+      color: #1a2232;
+      font-weight: 500;
+      word-break: break-all;
+    }
+    .solution-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .solution-option {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border: 1px solid #e2e6ec;
+      border-radius: 20px;
+      background: #fff;
+      font-size: 13px;
+      color: #4a5363;
+      cursor: pointer;
+      transition: 0.15s;
+      user-select: none;
+    }
+    .solution-option:hover { border-color: #055AA1; color: #055AA1; }
+    .solution-option input { accent-color: #055AA1; margin: 0; }
+    .solution-option:has(input:checked) {
+      border-color: #055AA1;
+      background: rgba(5, 90, 161, 0.06);
+      color: #055AA1;
+      font-weight: 500;
+    }
+    .solution-sub {
+      display: none;
+      margin-top: 10px;
+      background: #f7f9fc;
+      border-radius: 8px;
+      padding: 8px 14px;
+    }
+    .solution-sub.show { display: block; }
+    .solution-sub-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 3px 0;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .solution-sub-row + .solution-sub-row {
+      border-top: 1px dashed #e2e6ec;
+      margin-top: 4px;
+      padding-top: 7px;
+    }
+    .solution-sub-label {
+      color: #6f7887;
+      flex-shrink: 0;
+    }
+    .solution-sub-value {
+      color: #1a2232;
+      font-weight: 500;
+      word-break: break-all;
+    }
+    .solution-sub-tip {
+      margin-left: 8px;
+      color: #d93026;
+      font-size: 12px;
+      font-weight: 400;
+    }
+    .solution-remark-row {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 6px;
+    }
+    .solution-remark-row .solution-sub-label {
+      width: auto;
+    }
+    .solution-remark-input {
+      flex: 1;
+      min-width: 0;
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #e2e6ec;
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #1a2232;
+      background: #fff;
+      outline: none;
+      resize: vertical;
+      font-family: inherit;
+      transition: 0.15s;
+    }
+    .solution-remark-input::placeholder { color: #aab1bd; }
+    .solution-remark-input:focus {
+      border-color: #055AA1;
+      box-shadow: 0 0 0 3px rgba(5, 90, 161, 0.10);
+    }
+    .solution-remark-input.error {
+      border-color: #d93026;
+      background: #fff5f5;
+    }
+    .solution-extra-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .solution-extra-row .solution-addr-input {
+      flex: 1;
+      min-width: 0;
+    }
+    .solution-custom-select {
+      position: relative;
+      min-width: 150px;
+    }
+    .cs-trigger {
+      width: 100%;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 0 12px;
+      border: 1px solid #d6dbe3;
+      border-radius: 8px;
+      background: #fff;
+      font-size: 14px;
+      color: #1a2232;
+      font-family: inherit;
+      cursor: pointer;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .cs-trigger:hover { border-color: #055AA1; }
+    .solution-custom-select.open .cs-trigger,
+    .cs-trigger:focus-visible {
+      border-color: #055AA1;
+      box-shadow: 0 0 0 3px rgba(5, 90, 161, 0.12);
+      outline: none;
+    }
+    .cs-arrow {
+      font-size: 11px;
+      color: #8a93a3;
+      transition: transform 0.18s;
+    }
+    .solution-custom-select.open .cs-arrow { transform: rotate(180deg); }
+    .cs-list {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      right: 0;
+      margin: 0;
+      padding: 5px;
+      list-style: none;
+      background: #fff;
+      border: 1px solid #e8ebf0;
+      border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(17, 34, 51, 0.12);
+      z-index: 30;
+      opacity: 0;
+      transform: translateY(-4px);
+      pointer-events: none;
+      transition: opacity 0.16s, transform 0.16s;
+    }
+    .solution-custom-select.open .cs-list {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .cs-option {
+      padding: 8px 10px;
+      border-radius: 7px;
+      font-size: 14px;
+      color: #1a2232;
+      cursor: pointer;
+      transition: background 0.12s, color 0.12s;
+    }
+    .cs-option:hover { background: #eef3f8; color: #055AA1; }
+    .cs-option.selected { background: #055AA1; color: #fff; }
+    .solution-addr-input.error {
+      border-color: #d93026;
+      background: #fff5f5;
+    }
+    .solution-merge-options {
+      display: inline-flex;
+      gap: 14px;
+    }
+    .solution-merge-options label {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: #4a5363;
+      cursor: pointer;
+      user-select: none;
+    }
+    .solution-merge-options input { accent-color: #055AA1; margin: 0; }
+    .solution-addr-table {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px dashed #e8ebf0;
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .solution-addr-table th,
+    .solution-addr-table td {
+      border: 1px solid #e8ebf0;
+      padding: 3px 14px;
+      text-align: left;
+      vertical-align: middle;
+    }
+    .solution-addr-table thead th {
+      background: #f7f9fc;
+      color: #2b3340;
+      font-weight: 600;
+    }
+    .solution-addr-table .addr-field-col {
+      width: 96px;
+      color: #4a5363;
+      font-weight: 600;
+      background: #f7f9fc;
+      white-space: nowrap;
+    }
+    .solution-addr-table .addr-orig {
+      color: #6b7480;
+    }
+    .solution-addr-table .addr-nowrap {
+      white-space: nowrap;
+      min-width: 170px;
+    }
+    .solution-addr-table .addr-wide { min-width: 200px; }
+    .solution-addr-table {
+      display: none;
+      margin-top: 14px;
+    }
+    .solution-addr-table.show { display: table; }
+    .solution-addr-wrap {
+      display: none;
+      margin-top: 14px;
+    }
+    .solution-addr-wrap.show { display: block; }
+    .solution-addr-block { margin: 12px 0; }
+    .solution-addr-block-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1a2232;
+      margin: 6px 0 2px;
+    }
+    .solution-addr-box {
+      background: #f7f9fc;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 14px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-areas:
+        "name phone zip    .     ."
+        "country state city  addr  addr";
+      gap: 6px 20px;
+    }
+    .solution-addr-box .i-name    { grid-area: name; }
+    .solution-addr-box .i-phone   { grid-area: phone; }
+    .solution-addr-box .i-zip     { grid-area: zip; }
+    .solution-addr-box .i-country { grid-area: country; }
+    .solution-addr-box .i-state   { grid-area: state; }
+    .solution-addr-box .i-city    { grid-area: city; }
+    .solution-addr-box .i-addr    { grid-area: addr; }
+    .solution-addr-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a2232;
+      margin: 12px 0 8px;
+      padding-left: 8px;
+      line-height: 1.4;
+    }
+    .solution-addr-wrap .solution-info-item {
+      border-bottom: none;
+      padding: 4px 0;
+    }
+    .solution-addr-new .solution-label::before {
+      content: '*';
+      color: #d93026;
+      margin-right: 3px;
+    }
+    .solution-addr-wrap .solution-info-item input.solution-addr-input {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid #e3e7ee;
+      border-radius: 6px;
+      padding: 5px 8px;
+      font-size: 13px;
+      color: #1a2232;
+    }
+    .solution-addr-wrap .solution-info-item input.solution-addr-input:focus {
+      outline: none;
+      border-color: #055AA1;
+    }
+    .solution-addr-block .solution-addr-table {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+    }
+    .solution-addr-table td .solution-addr-input { margin: 0; }
+    .solution-addr-wrap .solution-addr-input.error {
+      border-color: #d93026;
+      box-shadow: 0 0 0 3px rgba(217, 48, 38, 0.10);
+    }
+    .solution-addr-input {
+      width: 100%;
+      box-sizing: border-box;
+      height: 32px;
+      border: 1px solid #e2e6ec;
+      border-radius: 6px;
+      padding: 0 10px;
+      font-size: 14px;
+      color: #1a2232;
+      background: #fff;
+      outline: none;
+      transition: 0.15s;
+    }
+    .solution-addr-input::placeholder { color: #aab1bd; }
+    .solution-addr-input:focus {
+      border-color: #055AA1;
+      box-shadow: 0 0 0 3px rgba(5, 90, 161, 0.10);
+    }
+    .solution-addr-input.lg {
+      height: 32px;
+      font-size: 14px;
+    }
+    /* ====== 处理记录弹窗 ====== */
+    .record-modal {
+      max-width: 680px;
+      max-height: 70vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .record-modal .modal-header {
+      justify-content: center;
+      padding-right: 0;
+    }
+    .record-modal .modal-header h2 {
+      font-size: 16px;
+    }
+    .record-list {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      border: 1px solid #e8ebf0;
+      border-radius: 8px;
+    }
+    .record-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .record-table th {
+      background: #f2f5f9;
+      color: #6f7887;
+      font-weight: 600;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid #e8ebf0;
+      white-space: nowrap;
+    }
+    .record-table td {
+      padding: 10px 14px;
+      color: #1a2232;
+      border-bottom: 1px solid #eef1f5;
+      vertical-align: top;
+      line-height: 1.6;
+    }
+    .record-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .record-table th.col-solution {
+      width: 46%;
+    }
+    .record-operator,
+    .record-time {
+      white-space: nowrap;
+    }
+    .solution-footer {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+      padding-top: 16px;
+      border-top: 1px solid #eef1f5;
+    }
+    .solution-footer .btn {
+      width: 60px;
+      height: 36px;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .solution-change-tip {
+      display: none;
+      margin-right: auto;
+      font-size: 12px;
+      color: #d93026;
+    }
+    .solution-change-tip.show { display: inline-block; }
+
+    /* 提交校验错误提示（带图标卡片样式） */
+    .solution-error-tip {
+      display: none;
+      margin-right: auto;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      line-height: 1.4;
+      color: #d93026;
+      background: #fdeceb;
+      border: 1px solid #f5c6c2;
+      border-radius: 8px;
+      padding: 7px 12px;
+      max-width: 75%;
+      box-shadow: 0 1px 3px rgba(217, 48, 38, 0.08);
+    }
+    .solution-error-tip.show { display: inline-flex; }
+    .solution-error-tip i {
+      font-size: 14px;
+      color: #d93026;
+      flex-shrink: 0;
+    }
+    .solution-error-tip span { white-space: normal; }
+
+    /* 校验失败时输入框/下拉红框 */
+    input[id^="solAddr"].error,
+    select[id^="solAddr"].error {
+      border-color: #d93026 !important;
+      box-shadow: 0 0 0 2px rgba(217, 48, 38, 0.12);
+    }
+
+    /* ====== 二次确认弹窗（提交解决方案） ====== */
+    .confirm-modal {
+      max-width: 340px;
+      padding: 24px 24px 20px;
+    }
+    .confirm-body {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .confirm-icon {
+      color: #f59e0b;
+      font-size: 18px;
+      line-height: 1.5;
+      flex-shrink: 0;
+    }
+    .confirm-text {
+      margin: 0;
+      font-size: 15px;
+      color: #1a2232;
+      line-height: 1.5;
+    }
+    .confirm-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 22px;
+    }
+    .confirm-footer .btn {
+      min-width: 76px;
+      height: 36px;
+      padding: 0;
+      justify-content: center;
+    }
+
+    /* ----- 响应式 ----- */
+    @media (max-width: 1024px) {
+      .navbar { padding: 0 20px; }
+      .navbar-right { gap: 18px; }
+      .nav-tabs { gap: 18px; }
+    }
+    @media (max-width: 768px) {
+      .navbar {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 12px 20px;
+        gap: 10px;
+      }
+      .navbar-logo { height: 60px; }
+      .navbar-right {
+        flex-wrap: wrap;
+        gap: 14px;
+        height: auto;
+      }
+      .nav-tabs { gap: 12px; flex-wrap: wrap; }
+      .sub-bar { padding-left: 20px; height: 24px; }
+
+      .sidebar {
+        width: 100%;
+        padding: 10px 5px;
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+      }
+      .menu-item { width: 100%; }
+      .sub-menu-item {
+        width: 100%;
+        height: 38px;
+        min-height: 38px;
+        margin-left: 0;
+        padding-left: 0;
+      }
+      .sub-menu {
+        padding-left: 42px;
+        margin-top: 4px;
+      }
+      .sub-menu-wrapper::before {
+        left: 22px;
+        width: 2px;
+      }
+      .sub-menu-wrapper {
+        margin-bottom: 4px;
+      }
+      .tab-bar { padding: 0 8px; }
+      .tab-content-area {
+        padding: 16px;
+      }
+
+      .search-row { flex-direction: column; align-items: stretch; }
+      .date-field-row { flex-wrap: wrap; }
+      .date-range-panel { width: 100%; left: 0; right: 0; }
+      .dp-months { flex-direction: column; }
+      .field-group.wide {
+        flex: 1 1 100%;
+        max-width: 100%;
+      }
+      .pagination-container { justify-content: center; }
+      .order-tab-bar { justify-content: center; }
+      .modal-overlay { padding: 16px; }
+      .modal-content { padding: 18px 14px 20px; max-width: 100%; }
+      .modal-img-main { min-height: 180px; max-height: 280px; }
+      .modal-img-main img { max-height: 280px; }
+      .modal-nav { width: 32px; height: 32px; font-size: 13px; }
+      .modal-thumb { width: 44px; height: 44px; }
+      .modal-header h2 { font-size: 15px; }
+    }
+
+    /* ---------- Toast 提示 ---------- */
+    .toast {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #16a34a;
+      color: #ffffff;
+      font-size: 14px;
+      padding: 12px 22px;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(22, 163, 74, 0.32);
+      z-index: 99999;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      transform: translate(-50%, -50%) scale(0.9);
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .toast-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+    .toast-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+  </style>
+</head>
+<body>
+  <!-- ========== 顶部导航 ========== -->
+  <header class="navbar">
+    <div class="navbar-logo">
+      <img src="" alt="LOGO" width="226" height="156" />
+    </div>
+    <div class="navbar-right">
+      <ul class="nav-tabs">
+        <li><a href="javascript:void(0)" class="tab-link">HOME</a></li>
+        <li><a href="javascript:void(0)" class="tab-link active">SEND</a></li>
+        <li><a href="javascript:void(0)" class="tab-link">ABOUT US</a></li>
+        <li><a href="javascript:void(0)" class="tab-link">CONTACT US</a></li>
+        <li><a href="javascript:void(0)" class="tab-link">TRACKING</a></li>
+      </ul>
+      <a href="javascript:void(0)" class="notification-icon" title="通知">
+        <i class="fas fa-bell"></i>
+      </a>
+      <div class="lang-dropdown">
+        <div class="lang-trigger">
+          <i class="fas fa-globe"></i>
+          <span>简体中文</span>
+          <i class="fas fa-chevron-down" style="font-size: 12px; margin-left: 2px;"></i>
+        </div>
+        <ul class="lang-dropdown-menu">
+          <li>简体中文</li>
+          <li>English</li>
+        </ul>
+      </div>
+      <div class="profile-dropdown">
+        <div class="profile-trigger">
+          <i class="fas fa-user-circle"></i>
+          <span class="phone-number">18000000000</span>
+        </div>
+        <ul class="profile-dropdown-menu">
+          <li>修改手机号</li>
+          <li>修改密码</li>
+          <li>退出</li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========== 下方色块 ========== -->
+  <div class="sub-bar">
+    <img src="" alt="占位" height="16" width="158" />
+  </div>
+
+  <!-- ========== 主体 ========== -->
+  <div class="app-wrapper">
+    <!-- 左侧导航 -->
+    <nav class="sidebar">
+      <ul class="menu-list">
+        <!-- 1. 首页（无二级）可选中 -->
+        <li class="menu-item no-arrow selectable" data-menu="首页">
+          <span class="menu-icon"><i class="fas fa-home"></i></span>
+          <span class="menu-label">首页</span>
+          <span class="menu-arrow"></span>
+        </li>
+
+        <!-- 2. 订单管理（有二级）不可选中 -->
+        <li class="sub-menu-wrapper" data-menu="订单管理">
+          <div class="menu-item has-sub" data-menu="订单管理">
+            <span class="menu-icon"><i class="fas fa-file-alt"></i></span>
+            <span class="menu-label">订单管理</span>
+            <span class="menu-arrow"><i class="fas fa-chevron-down"></i></span>
+          </div>
+          <ul class="sub-menu" style="display: flex;">
+            <li class="sub-menu-item" data-menu="订单管理">
+              <span class="sub-label">订单管理</span>
+            </li>
+            <li class="sub-menu-item" data-menu="轨迹查询">
+              <span class="sub-label">轨迹查询</span>
+            </li>
+          </ul>
+        </li>
+
+        <!-- 3. 财务信息（有二级）不可选中 -->
+        <li class="sub-menu-wrapper" data-menu="财务信息">
+          <div class="menu-item has-sub" data-menu="财务信息">
+            <span class="menu-icon"><i class="fas fa-coins"></i></span>
+            <span class="menu-label">财务信息</span>
+            <span class="menu-arrow"><i class="fas fa-chevron-down"></i></span>
+          </div>
+          <ul class="sub-menu" style="display: flex;">
+            <li class="sub-menu-item" data-menu="账单信息">
+              <span class="sub-label">账单信息</span>
+            </li>
+            <li class="sub-menu-item" data-menu="运价试算">
+              <span class="sub-label">运价试算</span>
+            </li>
+          </ul>
+        </li>
+
+        <!-- 4. 工单管理（有二级）不可选中 -->
+        <li class="sub-menu-wrapper" data-menu="工单管理">
+          <div class="menu-item has-sub active" data-menu="工单管理">
+            <span class="menu-icon"><i class="fas fa-tasks"></i></span>
+            <span class="menu-label">工单管理</span>
+            <span class="menu-arrow"><i class="fas fa-chevron-down"></i></span>
+          </div>
+          <ul class="sub-menu" style="display: flex;">
+            <li class="sub-menu-item" data-menu="工单管理">
+              <span class="sub-label">工单管理</span>
+            </li>
+            <!-- 异常单管理（新增二级，默认选中） -->
+            <li class="sub-menu-item active" data-menu="异常单管理">
+              <span class="sub-label">异常单管理</span>
+            </li>
+          </ul>
+        </li>
+
+        <!-- 5. 个人中心（无二级）可选中 -->
+        <li class="menu-item no-arrow selectable" data-menu="个人中心">
+          <span class="menu-icon"><i class="fas fa-user"></i></span>
+          <span class="menu-label">个人中心</span>
+          <span class="menu-arrow"></span>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- 右侧主内容：页签 + 内容区域 -->
+    <main class="main-content">
+      <!-- 页签栏 -->
+      <div class="tab-bar" id="tabBar">
+        <!-- 默认首页页签，不可关闭 -->
+        <div class="tab-item active home-tab" data-tab="首页">
+          <span>首页</span>
+          <span class="tab-close"><i class="fas fa-times"></i></span>
+        </div>
+      </div>
+      <!-- ==========================================================
+           内容区域 (tab-content-area) - 内边距 16px
+           ========================================================== -->
+      <div class="tab-content-area" id="tabContentArea">
+        <div style="background:white; padding:20px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+          <h2 style="font-weight: 400;">🏠 首页内容</h2>
+          <p style="margin-top: 12px; color: #3a4b5e;">欢迎使用系统，点击左侧菜单可打开新页签。</p>
+          <p style="margin-top: 8px; font-size: 14px; color: #5a6b7e;">首页页签不可关闭，其他页签可关闭。</p>
+          <p style="margin-top: 8px; font-size: 13px; color: #8a9baa;">内容区域内边距: 16px</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ========== 脚本 ========== -->
+  <script>
+    (function() {
+      // ============================================================
+      // 门户框架核心逻辑
+      // ============================================================
+      // 阻止点击默认行为
+      document.querySelectorAll('.tab-link, .notification-icon, .lang-dropdown-menu li, .profile-dropdown-menu li, a[href="javascript:void(0)"]')
+        .forEach(el => {
+          el.addEventListener('click', e => e.preventDefault());
+          el.addEventListener('mousedown', e => e.preventDefault());
+        });
+
+      document.querySelectorAll('.menu-item, .sub-menu-item').forEach(el => {
+        el.addEventListener('click', e => e.preventDefault());
+        el.addEventListener('mousedown', e => e.preventDefault());
+      });
+
+      function findMenuItemByName(menuName) {
+        const subItem = document.querySelector(`.sub-menu-item[data-menu="${menuName}"]`);
+        if (subItem) return subItem;
+        const menuItem = document.querySelector(`.menu-item.selectable[data-menu="${menuName}"]`);
+        return menuItem || null;
+      }
+
+      function highlightMenu(menuName) {
+        document.querySelectorAll('.menu-item, .sub-menu-item').forEach(item => item.classList.remove('active'));
+        if (!menuName) return;
+        const target = findMenuItemByName(menuName);
+        if (target) {
+          target.classList.add('active');
+        }
+      }
+
+      document.querySelectorAll('.sub-menu-wrapper > .menu-item.has-sub').forEach(item => {
+        const sub = item.parentElement.querySelector('.sub-menu');
+        if (sub) sub.style.display = 'flex';
+
+        item.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          this.classList.toggle('expanded');
+          const subMenu = this.parentElement.querySelector('.sub-menu');
+          if (subMenu) {
+            subMenu.style.display = subMenu.style.display === 'none' ? 'flex' : 'none';
+          }
+        });
+      });
+
+      // ============================================================
+      // 页签逻辑 + 内容映射（包含订单管理搜索组件 + 表格）
+      // ============================================================
+      const tabBar = document.getElementById('tabBar');
+      const contentArea = document.getElementById('tabContentArea');
+
+      // 订单管理页签的完整HTML（搜索 + 表格）
+      const orderManagementHTML = `
+        <div class="search-card">
+          <div class="search-row">
+            <div class="search-fields">
+              <div class="field-group wide">
+                <label for="orderNos">单号查询</label>
+                <textarea class="input-field" id="orderNos" rows="2" placeholder="请输入多个订单号或运单号，多个请用回车分隔"></textarea>
+              </div>
+              <div class="field-group">
+                <label>制单日期</label>
+                <div class="date-field-row">
+                  <div class="date-row-inline">
+                    <div class="date-range-wrapper" id="dateRangeWrapper">
+                      <div class="date-range-display" id="dateRangeDisplay">
+                        <i class="fas fa-calendar-alt range-icon"></i>
+                        <span id="dateRangeText">请选择</span>
+                        <i class="fas fa-times clear-icon" id="dateRangeClear" title="清除日期"></i>
+                      </div>
+                      <div class="date-range-panel" id="dateRangePanel">
+                        <div class="dp-months">
+                          <div class="dp-month" id="dpMonth1"></div>
+                          <div class="dp-month" id="dpMonth2"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="field-actions">
+                      <button class="btn btn-primary btn-sm-fixed" id="searchBtn"> 查询</button>
+                      <button class="btn btn-sm-fixed" id="resetBtn">重置</button>
+                    </div>
+                  </div>
+                  <div class="reason-field">
+                    <label>创建时间</label>
+                    <div class="date-row-inline">
+                      <div class="date-range-wrapper" id="createTimeRangeWrapper">
+                        <div class="date-range-display" id="createTimeRangeDisplay">
+                          <i class="fas fa-calendar-alt range-icon"></i>
+                          <span id="createTimeRangeText">请选择</span>
+                          <i class="fas fa-times clear-icon" id="createTimeRangeClear" title="清除日期"></i>
+                        </div>
+                        <div class="date-range-panel" id="createTimeRangePanel">
+                          <div class="dp-months">
+                            <div class="dp-month" id="createTimeMonth1"></div>
+                            <div class="dp-month" id="createTimeMonth2"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ====== 表格模块（基于表格.html） ====== -->
+        <div class="table-section">
+          <!-- 表格TAB -->
+          <div class="order-tab-bar" id="orderTabBar">
+            <div class="order-tabs">
+              <button class="order-tab-item active" data-tab="待处理"><span class="tab-text">待处理 <span class="tab-count">(0)</span></span></button>
+              <button class="order-tab-item" data-tab="已处理"><span class="tab-text">已处理 <span class="tab-count">(0)</span></span></button>
+              <button class="order-tab-item" data-tab="全部"><span class="tab-text">全部 <span class="tab-count">(0)</span></span></button>
+            </div>
+          </div>
+
+          <!-- 表格 -->
+          <div class="table-wrap">
+            <table>
+              <thead id="orderTableHead">
+                <!-- JS动态渲染 -->
+              </thead>
+              <tbody id="orderTableBody">
+                <!-- JS动态渲染 -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- 分页器 -->
+          <div class="pagination-container" id="orderPaginationContainer">
+            <div class="page-btns" id="orderPageBtns">
+              <button class="page-btn" data-page="prev" disabled><i class="fas fa-chevron-left"></i></button>
+              <button class="page-btn active" data-page="1">1</button>
+              <button class="page-btn" data-page="2">2</button>
+              <button class="page-btn" data-page="3">3</button>
+              <button class="page-btn" data-page="4">4</button>
+              <button class="page-btn" data-page="5">5</button>
+              <button class="page-btn" data-page="next"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <span class="page-info" id="orderTotalInfo">共 0 条</span>
+            <select class="page-size-select" id="orderPageSizeSelect">
+              <option value="10">10 条/页</option>
+              <option value="20" selected>20 条/页</option>
+              <option value="50">50 条/页</option>
+              <option value="100">100 条/页</option>
+            </select>
+            <div class="goto-wrap">
+              <span>跳至</span>
+              <input type="number" id="orderGotoInput" min="1" value="1">
+              <button class="goto-btn" id="orderGotoBtn">GO</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const contentMap = {
+        '首页': '<div style="background:white; padding:20px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.04);"><h2 style="font-weight:400;">🏠 首页内容</h2><p style="margin-top:12px; color:#3a4b5e;">欢迎使用系统，点击左侧菜单可打开新页签。</p><p style="margin-top:8px; font-size:14px; color:#5a6b7e;">首页页签不可关闭，其他页签可关闭。</p><p style="margin-top:8px; font-size:13px; color:#8a9baa;">内容区域内边距: 16px</p></div>',
+        '订单管理': '<div style="background:white; padding:20px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.04);"></div>',
+        '异常单管理': orderManagementHTML,
+        '账单信息': '<div style="background:white; padding:20px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.04);"><h2 style="font-weight:400;">💰 账单信息</h2><p style="margin-top:12px; color:#3a4b5e;">账单明细、支付记录。</p></div>',
+        '运价试算': '<div style="background:white; padding:20px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.04);"><h2 style="font-weight:400;">🧮 运价试算</h2><p style="margin-top:12px; color:#3a4b5e;">输入目的地、重量等获取预估运价。</p></div>',
+        '工单管理': '<div style="background:white; padding:20px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.04);"><h2 style="font-weight:400;">🛠️ 工单管理</h2><p style="margin-top:12px; color:#3a4b5e;">工单列表、处理进度。</p></div>',
+        '个人中心': '<div style="background:white; padding:20px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.04);"><h2 style="font-weight:400;">👤 个人中心</h2><p style="margin-top:12px; color:#3a4b5e;">个人信息、设置等。</p></div>'
+      };
+
+      function setActiveTab(tabEl) {
+        document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+        tabEl.classList.add('active');
+
+        const tabName = tabEl.dataset.tab;
+        if (tabName && contentMap[tabName]) {
+          contentArea.innerHTML = contentMap[tabName];
+          if (tabName === '异常单管理') {
+            initOrderManagement();
+          }
+        } else {
+          contentArea.innerHTML = `<div style="background:white; padding:20px; border-radius:12px;"><p>${tabName || '未知'}</p></div>`;
+        }
+
+        highlightMenu(tabName);
+      }
+
+      function closeTab(tabEl) {
+        if (tabEl.classList.contains('home-tab')) return;
+        const nextTab = tabEl.nextElementSibling || tabEl.previousElementSibling;
+        tabEl.remove();
+        if (nextTab) {
+          setActiveTab(nextTab);
+        } else if (tabBar.children.length > 0) {
+          setActiveTab(tabBar.children[0]);
+        } else {
+          createHomeTab();
+        }
+      }
+
+      function createHomeTab() {
+        const homeTab = document.createElement('div');
+        homeTab.className = 'tab-item active home-tab';
+        homeTab.dataset.tab = '首页';
+        homeTab.innerHTML = '<span>首页</span><span class="tab-close"><i class="fas fa-times"></i></span>';
+        tabBar.appendChild(homeTab);
+        setActiveTab(homeTab);
+        bindTabEvents(homeTab);
+      }
+
+      function bindTabEvents(tab) {
+        const closeBtn = tab.querySelector('.tab-close');
+        if (closeBtn) {
+          closeBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            closeTab(tab);
+          });
+        }
+        tab.addEventListener('click', function(e) {
+          if (e.target.closest('.tab-close')) return;
+          setActiveTab(this);
+        });
+      }
+
+      function openTab(menuName) {
+        let existTab = null;
+        for (let child of tabBar.children) {
+          if (child.dataset.tab === menuName) {
+            existTab = child;
+            break;
+          }
+        }
+        if (existTab) {
+          setActiveTab(existTab);
+          return;
+        }
+        const tab = document.createElement('div');
+        tab.className = 'tab-item';
+        tab.dataset.tab = menuName;
+        tab.innerHTML = `<span>${menuName}</span><span class="tab-close"><i class="fas fa-times"></i></span>`;
+        tabBar.appendChild(tab);
+        setActiveTab(tab);
+        bindTabEvents(tab);
+      }
+
+      // ============================================================
+      // 订单管理页签专用：日期选择器 + 表格
+      // ============================================================
+      let orderDataGlobal = [];
+      let orderCurrentPageGlobal = 1;
+      let orderPageSizeGlobal = 20;
+      let orderCurrentFilterGlobal = '待处理';
+      let orderSortKeyGlobal = '';
+      let orderSortDirGlobal = 'asc';
+      let confirmModalInstance = null;
+      let confirmModalHandler = null;
+      let orderTotalItemsGlobal = 0;
+      let selectedOrderIdsGlobal = new Set();
+      let solutionModalInstance = null;
+      let solutionIsChangeGlobal = false;
+      let recordModalInstance = null;
+      let searchParams = { orderNos: '', startDate: '', endDate: '', createTimeStart: '', createTimeEnd: '' };
+
+      // 全局暴露 openSolutionModal，确保 onclick 可以调用
+      window.openSolutionModal = function(data, isChange) {
+        if (!data) return;
+        solutionIsChangeGlobal = !!isChange;
+        if (!solutionModalInstance) {
+          createSolutionModal();
+        }
+
+        // 变更模式下切换标题并显示提示文案
+        const titleEl = document.getElementById('solutionModalTitle');
+        const tipEl = document.getElementById('solutionChangeTip');
+        if (titleEl) titleEl.textContent = isChange ? '变更解决方案' : '提供解决方案';
+        if (tipEl) tipEl.classList.toggle('show', !!isChange);
+
+        document.getElementById('solOrderNo').textContent = data.orderNo || '-';
+        document.getElementById('solTrackingNo').textContent = data.trackingNo || '-';
+        document.getElementById('solAbnormalReason').textContent = data.abnormalReason || '-';
+        document.getElementById('solWarehouse').textContent = data.warehouse || '-';
+        document.getElementById('solCreateDate').textContent = data.createDate || '-';
+        document.getElementById('solCreateTime').textContent = (data.createTime || '').slice(0, 10) || '-';
+        document.getElementById('solDeadlineTime').textContent = (data.deadlineTime || '').slice(0, 10) || '-';
+        document.getElementById('solStatus').textContent = data.status || '-';
+        document.getElementById('solWorkOrderNo').textContent = data.workOrderNo || '-';
+        document.getElementById('solDeliveryCount').textContent = (data.deliveryCount != null && data.deliveryCount !== '') ? data.deliveryCount : '-';
+
+        // 解决方案默认不选中任何项
+        const radios = document.querySelectorAll('input[name="solution"]');
+        radios.forEach(r => { r.checked = false; });
+        // 清空辅助派送下拉与输入
+        const _es = document.getElementById('solExtraSelect');
+        const _ei = document.getElementById('solExtraInput');
+        if (_es) _es.value = '';
+        if (_ei) { _ei.value = ''; _ei.style.display = 'none'; }
+        if (_es) updateExtraSelectUI();
+        syncSolutionPanels();
+
+        // 换单重派/新地址重派 合并轨迹均固定为"是"（仅展示）
+        // 新地址表单默认回显原收件人信息与地址，新地址留空必填
+        fillSolAddrForm(data);
+        clearSolutionError();
+
+        solutionModalInstance.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      };
+
+      function showSolutionError(msg) {
+        const tip = document.getElementById('solutionErrorTip');
+        if (tip) {
+          tip.innerHTML = `<i class="fas fa-exclamation-circle"></i><span>${msg}</span>`;
+          tip.classList.add('show');
+        }
+      }
+
+      function clearSolutionError() {
+        const tip = document.getElementById('solutionErrorTip');
+        if (tip) {
+          tip.textContent = '';
+          tip.classList.remove('show');
+        }
+        document.querySelectorAll('input[id^="solAddr"].error, select[id^="solAddr"].error, .solution-remark-input.error, input[id^="solExtra"].error')
+          .forEach(e => e.classList.remove('error'));
+      }
+
+      function closeSolutionModal() {
+        if (!solutionModalInstance) return;
+        solutionModalInstance.classList.remove('open');
+        document.body.style.overflow = '';
+        clearSolutionError();
+      }
+
+      // 辅助派送下拉选择后，显示对应输入框（门禁密码/给派送员留言需要填写）
+      function syncExtraPanels() {
+        const sel = document.getElementById('solExtraSelect');
+        const input = document.getElementById('solExtraInput');
+        if (!sel || !input) return;
+        const v = sel.value;
+        const needInput = v === '门禁密码' || v === '给派送员留言';
+        input.style.display = needInput ? '' : 'none';
+        if (!needInput) input.value = '';
+        input.placeholder = v === '门禁密码' ? '请输入门禁密码'
+          : v === '给派送员留言' ? '请输入给派送员的留言内容'
+          : '请输入';
+      }
+
+      // 自定义下拉：把隐藏 select 的值同步到触发按钮文本与选中态
+      function updateExtraSelectUI() {
+        const sel = document.getElementById('solExtraSelect');
+        const text = document.getElementById('solExtraText');
+        const list = document.getElementById('solExtraList');
+        if (!sel || !text || !list) return;
+        const v = sel.value;
+        const opt = list.querySelector('.cs-option[data-value="' + v + '"]');
+        text.textContent = opt ? opt.textContent : '无';
+        list.querySelectorAll('.cs-option').forEach(o => {
+          o.classList.toggle('selected', o.getAttribute('data-value') === v);
+        });
+      }
+
+      // 初始化辅助派送自定义下拉交互
+      function initExtraCustomSelect() {
+        const wrap = document.getElementById('solExtraCustom');
+        const trigger = document.getElementById('solExtraTrigger');
+        const list = document.getElementById('solExtraList');
+        const sel = document.getElementById('solExtraSelect');
+        if (!wrap || !trigger || !list || !sel) return;
+        const options = list.querySelectorAll('.cs-option');
+        trigger.addEventListener('click', function(e) {
+          e.stopPropagation();
+          wrap.classList.toggle('open');
+        });
+        options.forEach(li => {
+          li.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const v = li.getAttribute('data-value');
+            sel.value = v;
+            updateExtraSelectUI();
+            wrap.classList.remove('open');
+            sel.dispatchEvent(new Event('change'));
+          });
+        });
+        document.addEventListener('click', function(e) {
+          if (wrap && !wrap.contains(e.target)) wrap.classList.remove('open');
+        });
+      }
+
+      function syncSolutionPanels() {
+        const reroutePanel = document.getElementById('solReroutePanel');
+        const addrPanel = document.getElementById('solNewAddrPanel');
+        const extraPanel = document.getElementById('solExtraPanel');
+        const checked = document.querySelector('input[name="solution"]:checked');
+        const val = checked ? checked.value : '';
+        if (reroutePanel) reroutePanel.classList.toggle('show', val === '换单重派');
+        if (addrPanel) addrPanel.classList.toggle('show', val === '新地址重派');
+        const addrTablePanel = document.getElementById('solAddrTablePanel');
+        if (addrTablePanel) addrTablePanel.classList.toggle('show', val === '新地址重派');
+        // 新地址重派时，固定上方信息、解决方案区域滚动
+        if (solutionModalInstance) {
+          solutionModalInstance.classList.toggle('scroll-split', val === '新地址重派');
+        }
+        // 仅 再次派送 时显示补充信息
+        const showExtra = val === '再次派送';
+        if (extraPanel) extraPanel.classList.toggle('show', showExtra);
+        // 离开补充场景时重置辅助派送
+        if (!showExtra) {
+          const _es = document.getElementById('solExtraSelect');
+          const _ei = document.getElementById('solExtraInput');
+          if (_es) _es.value = '';
+          if (_ei) { _ei.value = ''; _ei.style.display = 'none'; }
+          updateExtraSelectUI();
+          syncExtraPanels();
+        }
+      }
+
+      // 新地址重派表单：原派件信息只读回显，新派件信息清空必填
+      function fillSolAddrForm(data) {
+        const setVal = (id, v) => {
+          const el = document.getElementById(id);
+          if (el) el.value = v == null ? '' : v;
+        };
+        const setOrig = (id, v) => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = (v == null || v === '') ? '-' : v;
+        };
+        const full = ((data && data.address) || '').trim();
+        const parts = full.split(',').map(s => s.trim());
+        let street = parts[0] || full;
+        let city = '', state = '', postcode = '';
+        if (parts.length > 1) city = parts[1] || '';
+        if (parts.length > 2) {
+          const sp = parts[2].split(/\s+/);
+          postcode = sp.length > 1 ? sp[sp.length - 1] : '';
+          state = sp.length > 1 ? sp.slice(0, -1).join(' ') : parts[2];
+        }
+        // 原派件信息（只读回显）
+        setOrig('solOrigName', data && data.receiverName);
+        setOrig('solOrigPhone', data && data.receiverPhone);
+        setOrig('solOrigCountry', 'United States');
+        setOrig('solOrigState', state);
+        setOrig('solOrigCity', city);
+        setOrig('solOrigPostcode', postcode);
+        setOrig('solOrigAddress', street);
+        // 新派件信息（清空，用户填写；国家默认 USA，可修改）
+        setVal('solAddrName', '');
+        setVal('solAddrPhone', '');
+        setVal('solAddrCountry', 'USA');
+        setVal('solAddrState', '');
+        setVal('solAddrCity', '');
+        setVal('solAddrPostcode', '');
+        setVal('solAddrLine2', '');
+      }
+
+      function createSolutionModal() {
+        solutionModalInstance = document.createElement('div');
+        solutionModalInstance.className = 'modal-overlay';
+        solutionModalInstance.id = 'solutionModal';
+        solutionModalInstance.innerHTML = `
+          <div class="modal-content solution-modal">
+            <button class="modal-close" id="solutionModalClose"><i class="fas fa-times"></i></button>
+            <div class="modal-header">
+              <h2 id="solutionModalTitle">提供解决方案</h2>
+            </div>
+
+            <div class="solution-body">
+            <!-- 展示信息1组：异常单信息 -->
+            <div class="solution-section">
+              <div class="solution-info solution-info-grid">
+                <div class="solution-info-item"><span class="solution-label">订单号</span><span class="solution-value" id="solOrderNo">-</span></div>
+                <div class="solution-info-item"><span class="solution-label">运单号</span><span class="solution-value" id="solTrackingNo">-</span></div>
+                <div class="solution-info-item"><span class="solution-label">异常原因</span><span class="solution-value" id="solAbnormalReason">-</span></div>
+                <div class="solution-info-item"><span class="solution-label">制单仓</span><span class="solution-value" id="solWarehouse">-</span></div>
+                <div class="solution-info-item"><span class="solution-label">制单日期</span><span class="solution-value" id="solCreateDate">-</span></div>
+                <div class="solution-info-item"><span class="solution-label">创建时间</span><span class="solution-value" id="solCreateTime">-</span></div>
+                <div class="solution-info-item"><span class="solution-label">截止时间</span><span class="solution-value" id="solDeadlineTime">-</span></div>
+                <div class="solution-info-item"><span class="solution-label">处理状态</span><span class="solution-value" id="solStatus">-</span></div>
+                <div class="solution-info-item"><span class="solution-label">工单号</span><span class="solution-value" id="solWorkOrderNo">-</span></div>
+                <div class="solution-info-item"><span class="solution-label">派送次数</span><span class="solution-value" id="solDeliveryCount">-</span></div>
+              </div>
+            </div>
+
+            <!-- 展示信息2组：解决方案 -->
+            <div class="solution-section">
+              <div class="solution-section-title">解决方案</div>
+              <div class="solution-options">
+                <label class="solution-option"><input type="radio" name="solution" value="退回"><span>退回</span></label>
+                <label class="solution-option"><input type="radio" name="solution" value="销毁"><span>销毁</span></label>
+                <label class="solution-option"><input type="radio" name="solution" value="再次派送"><span>再次派送</span></label>
+                <label class="solution-option"><input type="radio" name="solution" value="换单重派"><span>换单重派</span></label>
+                <label class="solution-option"><input type="radio" name="solution" value="新地址重派"><span>新地址重派</span></label>
+              </div>
+
+              <!-- 下方详情面板滚动区 -->
+              <div class="solution-panels">
+              <!-- 换单重派操作区 -->
+              <div class="solution-sub" id="solReroutePanel">
+                <div class="solution-sub-row">
+                  <span class="solution-sub-label">新产品</span>
+                  <span class="solution-sub-value">E0002-YWE收费换单重派<span class="solution-sub-tip">（默认不可选择、页面无需展示、这里展示是为了看下逻辑）</span></span>
+                </div>
+                <div class="solution-sub-row">
+                  <span class="solution-sub-label">是否合并轨迹</span>
+                  <span class="solution-sub-value">是<span class="solution-sub-tip">（默认不可选择、页面无需展示、这里展示是为了看下逻辑）</span></span>
+                </div>
+              </div>
+
+              <!-- 新地址派送：基础信息 -->
+              <div class="solution-sub" id="solNewAddrPanel">
+                <div class="solution-sub-row">
+                  <span class="solution-sub-label">新产品</span>
+                  <span class="solution-sub-value">E0002-YWE收费换单重派<span class="solution-sub-tip">（默认不可选择、页面无需展示、这里展示是为了看下逻辑）</span></span>
+                </div>
+                <div class="solution-sub-row">
+                  <span class="solution-sub-label">是否合并轨迹</span>
+                  <span class="solution-sub-value">是<span class="solution-sub-tip">（默认不可选择、页面无需展示、这里展示是为了看下逻辑）</span></span>
+                </div>
+              </div>
+
+              <!-- 新地址派送：派件信息对比（与顶部异常单信息同款样式） -->
+              <div class="solution-addr-wrap" id="solAddrTablePanel">
+                <div class="solution-addr-block">
+                  <div class="solution-addr-title">原地址信息</div>
+                  <div class="solution-addr-box">
+                    <div class="solution-info-item i-name"><span class="solution-label">姓名</span><span class="solution-value" id="solOrigName">-</span></div>
+                    <div class="solution-info-item i-phone"><span class="solution-label">电话</span><span class="solution-value" id="solOrigPhone">-</span></div>
+                    <div class="solution-info-item i-zip"><span class="solution-label">邮编</span><span class="solution-value" id="solOrigPostcode">-</span></div>
+                    <div class="solution-info-item i-country"><span class="solution-label">国家</span><span class="solution-value" id="solOrigCountry">-</span></div>
+                    <div class="solution-info-item i-state"><span class="solution-label">州/省</span><span class="solution-value" id="solOrigState">-</span></div>
+                    <div class="solution-info-item i-city"><span class="solution-label">城市</span><span class="solution-value" id="solOrigCity">-</span></div>
+                    <div class="solution-info-item i-addr"><span class="solution-label">原地址</span><span class="solution-value" id="solOrigAddress">-</span></div>
+                  </div>
+                </div>
+                <div class="solution-addr-block solution-addr-new">
+                  <div class="solution-addr-title">新地址信息</div>
+                  <div class="solution-addr-box">
+                    <div class="solution-info-item i-name"><span class="solution-label">姓名</span><input type="text" id="solAddrName" class="solution-addr-input" placeholder="姓名"></div>
+                    <div class="solution-info-item i-phone"><span class="solution-label">电话</span><input type="text" id="solAddrPhone" class="solution-addr-input" placeholder="电话"></div>
+                    <div class="solution-info-item i-zip"><span class="solution-label">邮编</span><input type="text" id="solAddrPostcode" class="solution-addr-input" placeholder="邮编"></div>
+                    <div class="solution-info-item i-country"><span class="solution-label">国家</span><input type="text" id="solAddrCountry" class="solution-addr-input" placeholder="国家"></div>
+                    <div class="solution-info-item i-state"><span class="solution-label">州/省</span><input type="text" id="solAddrState" class="solution-addr-input" placeholder="州/省"></div>
+                    <div class="solution-info-item i-city"><span class="solution-label">城市</span><input type="text" id="solAddrCity" class="solution-addr-input" placeholder="城市"></div>
+                    <div class="solution-info-item i-addr"><span class="solution-label">新地址</span><input type="text" id="solAddrLine2" class="solution-addr-input" placeholder="地址"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 补充信息 -->
+              <div class="solution-sub" id="solExtraPanel">
+                <div class="solution-sub-row solution-extra-row">
+                  <span class="solution-sub-label">补充信息</span>
+                  <div class="solution-custom-select" id="solExtraCustom">
+                    <button type="button" class="cs-trigger" id="solExtraTrigger">
+                      <span class="cs-text" id="solExtraText">无</span>
+                      <i class="fas fa-chevron-down cs-arrow"></i>
+                    </button>
+                    <ul class="cs-list" id="solExtraList">
+                      <li class="cs-option" data-value="">无</li>
+                      <li class="cs-option" data-value="门禁密码">门禁密码</li>
+                      <li class="cs-option" data-value="仓库自提">仓库自提</li>
+                      <li class="cs-option" data-value="给派送员留言">给派送员留言</li>
+                    </ul>
+                    <select id="solExtraSelect" style="display:none;">
+                      <option value=""></option>
+                      <option value="门禁密码">门禁密码</option>
+                      <option value="仓库自提">仓库自提</option>
+                      <option value="给派送员留言">给派送员留言</option>
+                    </select>
+                  </div>
+                  <input type="text" class="solution-addr-input" id="solExtraInput" placeholder="请输入" style="display:none;">
+                </div>
+              </div>
+              </div>
+
+            </div>
+            </div>
+
+            <div class="solution-footer">
+              <span class="solution-error-tip" id="solutionErrorTip"></span>
+              <button class="btn" id="solutionCancel">取消</button>
+              <button class="btn btn-primary" id="solutionConfirm">确认</button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(solutionModalInstance);
+
+        document.getElementById('solutionModalClose').addEventListener('click', closeSolutionModal);
+        document.getElementById('solutionCancel').addEventListener('click', closeSolutionModal);
+        const solutionRadios = document.querySelectorAll('input[name="solution"]');
+        solutionRadios.forEach(r => {
+          r.addEventListener('change', syncSolutionPanels);
+        });
+        const extraSelect = document.getElementById('solExtraSelect');
+        if (extraSelect) {
+          extraSelect.addEventListener('change', function() {
+            syncExtraPanels();
+            clearSolutionError();
+          });
+        }
+        initExtraCustomSelect();
+        solutionModalInstance.addEventListener('click', function(e) {
+          if (e.target === this) closeSolutionModal();
+        });
+        document.getElementById('solutionConfirm').addEventListener('click', function() {
+          const selected = document.querySelector('input[name="solution"]:checked');
+          // 校验1：是否已选择解决方案
+          if (!selected) {
+            showSolutionError('请先选择解决方案，再提交');
+            return;
+          }
+          // 校验2：新地址重派时，地址信息必填
+          if (selected.value === '新地址重派') {
+            const requiredFields = [
+              ['solAddrName', '姓名'],
+              ['solAddrPhone', '电话'],
+              ['solAddrCountry', '国家'],
+              ['solAddrState', '州/省'],
+              ['solAddrCity', '城市'],
+              ['solAddrPostcode', '邮编'],
+              ['solAddrLine2', '新地址']
+            ];
+            // 先清除上次留下的红框
+            requiredFields.forEach(([id]) => {
+              const e = document.getElementById(id);
+              if (e) e.classList.remove('error');
+            });
+            for (const [id, label] of requiredFields) {
+              const el = document.getElementById(id);
+              if (!el || !String(el.value || '').trim()) {
+                showSolutionError(`${label} 不能为空`);
+                el.classList.add('error');
+                el.focus();
+                return;
+              }
+            }
+          }
+          // 校验3：选择了门禁密码或给派送员留言时，输入框必填
+          const _es = document.getElementById('solExtraSelect');
+          const _ei = document.getElementById('solExtraInput');
+          if (_es && (_es.value === '门禁密码' || _es.value === '给派送员留言')) {
+            if (!_ei || !String(_ei.value || '').trim()) {
+              showSolutionError(_es.value === '门禁密码' ? '请填写门禁密码' : '请填写给派送员的留言内容');
+              if (_ei) { _ei.classList.add('error'); _ei.focus(); }
+              return;
+            }
+          }
+          clearSolutionError();
+          const extraVal = (document.getElementById('solExtraSelect') || {}).value || '';
+          const solLabel = extraVal ? `${selected.value}（${extraVal}）` : selected.value;
+          openConfirmModal(function() {
+            showToast(solutionIsChangeGlobal ? '变更成功' : '处理成功');
+            closeSolutionModal();
+          }, `确认提交【${solLabel}】解决方案？`);
+        });
+
+        // 选择方案或输入地址信息后清除错误提示
+        document.querySelectorAll('input[name="solution"]').forEach(r => {
+          r.addEventListener('change', clearSolutionError);
+        });
+        document.querySelectorAll('.solution-addr-input, .solution-remark-input').forEach(inp => {
+          inp.addEventListener('input', clearSolutionError);
+        });
+      }
+
+      // ====== 二次确认弹窗 ======
+      function openConfirmModal(onConfirm, text) {
+        if (!confirmModalInstance) createConfirmModal();
+        confirmModalHandler = onConfirm;
+        const _ct = document.getElementById('confirmText');
+        if (_ct) _ct.textContent = text || '确认提交解决方案？';
+        confirmModalInstance.classList.add('open');
+      }
+
+      function closeConfirmModal() {
+        if (confirmModalInstance) confirmModalInstance.classList.remove('open');
+        confirmModalHandler = null;
+      }
+
+      // ====== 变更拦截提示弹窗 ======
+      let changeBlockModalInstance = null;
+      function showChangeBlockAlert() {
+        if (!changeBlockModalInstance) createChangeBlockModal();
+        changeBlockModalInstance.classList.add('open');
+      }
+      function closeChangeBlockModal() {
+        if (changeBlockModalInstance) changeBlockModalInstance.classList.remove('open');
+      }
+      function createChangeBlockModal() {
+        changeBlockModalInstance = document.createElement('div');
+        changeBlockModalInstance.className = 'modal-overlay';
+        changeBlockModalInstance.id = 'changeBlockModal';
+        changeBlockModalInstance.innerHTML = `
+          <div class="modal-content confirm-modal">
+            <div class="confirm-body">
+              <i class="fas fa-exclamation-circle confirm-icon"></i>
+              <p class="confirm-text">该工单当前状态无法进行变更，如有问题可联系YWE客户</p>
+            </div>
+            <div class="confirm-footer">
+              <button class="btn btn-primary" id="changeBlockBtn">关闭</button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(changeBlockModalInstance);
+        document.getElementById('changeBlockBtn').addEventListener('click', closeChangeBlockModal);
+        changeBlockModalInstance.addEventListener('click', function(e) {
+          if (e.target === this) closeChangeBlockModal();
+        });
+      }
+      window.showChangeBlockAlert = showChangeBlockAlert;
+
+      // ====== Toast 提示 ======
+      function showToast(msg) {
+        let toast = document.getElementById('appToast');
+        if (!toast) {
+          toast = document.createElement('div');
+          toast.id = 'appToast';
+          toast.className = 'toast';
+          document.body.appendChild(toast);
+        }
+        toast.innerHTML = '<span class="toast-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>' + '<span>' + msg + '</span>';
+        // 强制回流后重新播放动画
+        void toast.offsetWidth;
+        toast.classList.add('show');
+        clearTimeout(toast._timer);
+        toast._timer = setTimeout(function() {
+          toast.classList.remove('show');
+        }, 1800);
+      }
+
+      function createConfirmModal() {
+        confirmModalInstance = document.createElement('div');
+        confirmModalInstance.className = 'modal-overlay';
+        confirmModalInstance.id = 'confirmModal';
+        confirmModalInstance.innerHTML = `
+          <div class="modal-content confirm-modal">
+            <div class="confirm-body">
+              <i class="fas fa-exclamation-circle confirm-icon"></i>
+              <p class="confirm-text" id="confirmText">确认提交解决方案？</p>
+            </div>
+            <div class="confirm-footer">
+              <button class="btn" id="confirmModalCancel">取消</button>
+              <button class="btn btn-primary" id="confirmModalSubmit">提交</button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(confirmModalInstance);
+
+        document.getElementById('confirmModalCancel').addEventListener('click', closeConfirmModal);
+        document.getElementById('confirmModalSubmit').addEventListener('click', function() {
+          const handler = confirmModalHandler;
+          closeConfirmModal();
+          if (typeof handler === 'function') handler();
+        });
+        confirmModalInstance.addEventListener('click', function(e) {
+          if (e.target === this) closeConfirmModal();
+        });
+      }
+
+      // 全局暴露 openRecordModal，确保 onclick 可以调用
+      window.openRecordModal = function(orderNo) {
+        if (!recordModalInstance) {
+          createRecordModal();
+        }
+        const item = orderDataGlobal.find(d => d.orderNo === orderNo);
+        const records = (item && item.records) || [];
+        const list = document.getElementById('recordList');
+        if (records.length === 0) {
+          list.innerHTML = '<div style="text-align:center;color:#9aa1ad;padding:24px 0;">暂无处理记录</div>';
+        } else {
+          list.innerHTML = `
+            <table class="record-table">
+              <thead>
+                <tr>
+                  <th class="col-solution">解决方案</th>
+                  <th>操作人</th>
+                  <th>操作时间</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${records.map(r => {
+                  return `
+                    <tr>
+                      <td class="record-solution">${r.category || ''}</td>
+                      <td class="record-operator">${r.operator || 'YWE客服'}</td>
+                      <td class="record-time">${r.time || ''}</td>
+                    </tr>`;
+                }).join('')}
+              </tbody>
+            </table>`;
+        }
+        recordModalInstance.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      };
+
+      function createRecordModal() {
+        recordModalInstance = document.createElement('div');
+        recordModalInstance.className = 'modal-overlay';
+        recordModalInstance.id = 'recordModal';
+        recordModalInstance.innerHTML = `
+          <div class="modal-content record-modal">
+            <button class="modal-close" id="recordModalClose"><i class="fas fa-times"></i></button>
+            <div class="modal-header">
+              <h2>处理记录</h2>
+            </div>
+            <div class="record-list" id="recordList"></div>
+            <div class="solution-footer">
+              <button class="btn" id="recordModalCloseBtn">关闭</button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(recordModalInstance);
+
+        function closeRecordModal() {
+          recordModalInstance.classList.remove('open');
+          document.body.style.overflow = '';
+        }
+        document.getElementById('recordModalClose').addEventListener('click', closeRecordModal);
+        document.getElementById('recordModalCloseBtn').addEventListener('click', closeRecordModal);
+        recordModalInstance.addEventListener('click', function(e) {
+          if (e.target === this) closeRecordModal();
+        });
+      }
+
+      function initOrderManagement() {
+        // 清除之前的弹窗
+        if (solutionModalInstance) {
+          solutionModalInstance.remove();
+          solutionModalInstance = null;
+        }
+        if (recordModalInstance) {
+          recordModalInstance.remove();
+          recordModalInstance = null;
+        }
+
+        // ====== 日期选择器逻辑 ======
+        const display = document.getElementById('dateRangeDisplay');
+        const text = document.getElementById('dateRangeText');
+        const panel = document.getElementById('dateRangePanel');
+        const m1 = document.getElementById('dpMonth1');
+        const m2 = document.getElementById('dpMonth2');
+
+        if (!display || !text || !panel || !m1 || !m2) {
+          return;
+        }
+
+        let start = new Date('2026-08-08');
+        let end = new Date('2026-08-27');
+        let curMonth = start.getMonth();
+        let curYear = start.getFullYear();
+        let selectingStart = true;
+        let dateSelected = false;
+
+        function fmt(d) {
+          const y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,'0'), day = String(d.getDate()).padStart(2,'0');
+          return `${y}-${m}-${day}`;
+        }
+
+        function updateText() {
+          const el = document.getElementById('dateRangeText');
+          if (!el) return;
+          if (dateSelected) {
+            el.textContent = `${fmt(start)} 至 ${fmt(end)}`;
+          } else {
+            el.textContent = '请选择';
+          }
+          const d = document.getElementById('dateRangeDisplay');
+          if (d) d.classList.toggle('has-date', dateSelected);
+        }
+
+        function renderMonth(container, year, month) {
+          if (!container) return;
+          const first = new Date(year, month, 1).getDay();
+          const days = new Date(year, month+1, 0).getDate();
+          const s = start.getTime(), e = end.getTime();
+
+          let html = `
+            <div class="dp-header">
+              <button class="dp-nav" data-dir="-1"><i class="fas fa-chevron-left"></i></button>
+              <span>${year}年${month+1}月</span>
+              <button class="dp-nav" data-dir="1"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="dp-weekdays"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>
+            <div class="dp-days">`;
+          for (let i=0; i<first; i++) html += `<div class="dp-day other-month"></div>`;
+          for (let d=1; d<=days; d++) {
+            const date = new Date(year, month, d);
+            const ts = date.getTime();
+            const str = fmt(date);
+            let cls = 'dp-day';
+            if (str === fmt(start) || str === fmt(end)) cls += ' selected';
+            else if (ts > s && ts < e && s < e) cls += ' in-range';
+            html += `<div class="${cls}" data-date="${str}" data-time="${ts}">${d}</div>`;
+          }
+          html += `</div>`;
+          container.innerHTML = html;
+
+          container.querySelectorAll('.dp-nav').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+              e.stopPropagation();
+              const dir = parseInt(this.dataset.dir);
+              curMonth += dir;
+              if (curMonth < 0) { curMonth = 11; curYear--; }
+              if (curMonth > 11) { curMonth = 0; curYear++; }
+              renderAll();
+            });
+          });
+
+          container.querySelectorAll('.dp-day:not(.other-month)').forEach(el => {
+            el.addEventListener('click', function(e) {
+              e.stopPropagation();
+              dateSelected = true;
+              const ts = parseInt(this.dataset.time);
+              if (selectingStart) {
+                start = new Date(ts);
+                end = new Date(ts);
+                selectingStart = false;
+              } else {
+                if (ts < start.getTime()) { end = start; start = new Date(ts); }
+                else { end = new Date(ts); }
+                selectingStart = true;
+                if (panel) panel.classList.remove('open');
+                const curDisplay = document.getElementById('dateRangeDisplay');
+                if (curDisplay) curDisplay.classList.remove('active');
+              }
+              updateText();
+              renderAll();
+            });
+          });
+        }
+
+        function renderAll() {
+          let m2m = curMonth + 1, y2 = curYear;
+          if (m2m > 11) { m2m = 0; y2++; }
+          renderMonth(m1, curYear, curMonth);
+          renderMonth(m2, y2, m2m);
+        }
+
+        const newDisplay = display.cloneNode(true);
+        display.parentNode.replaceChild(newDisplay, display);
+        const newPanel = document.getElementById('dateRangePanel');
+
+        newDisplay.addEventListener('click', function(e) {
+          e.stopPropagation();
+          newPanel.classList.toggle('open');
+          this.classList.toggle('active');
+          if (newPanel.classList.contains('open')) {
+            curYear = start.getFullYear();
+            curMonth = start.getMonth();
+            selectingStart = true;
+            renderAll();
+          }
+        });
+
+        // 清除日期按钮
+        const clearIcon = document.getElementById('dateRangeClear');
+        if (clearIcon) {
+          const newClearIcon = clearIcon.cloneNode(true);
+          clearIcon.parentNode.replaceChild(newClearIcon, clearIcon);
+          newClearIcon.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dateSelected = false;
+            searchParams.startDate = '';
+            searchParams.endDate = '';
+            newPanel.classList.remove('open');
+            newDisplay.classList.remove('active');
+            updateText();
+            renderOrderTable();
+            console.log('🗑️ 已清除日期');
+          });
+        }
+
+        document.addEventListener('click', function(e) {
+          if (!newDisplay.parentElement.contains(e.target)) {
+            newPanel.classList.remove('open');
+            newDisplay.classList.remove('active');
+          }
+        });
+
+        // =============================================================
+        // ====== 生成订单数据 ======
+        // =============================================================
+        const warehouses = ['LAX01', 'NJC01', 'DFW01', 'ORD01'];
+        const allStatuses = ['待处理', '已处理'];
+        const receivers = ['张伟', '李芳', '王明', '刘丽', '陈强', '杨艳', '赵军', '黄敏', '周静', '吴涛'];
+        const abnormalReasons = ['包裹丢失', '由于天气原因报错延误', '包裹被偷'];
+        const createWarehouses = ['DFW01', 'LAX01', 'NJC01', 'ORD01'];
+        const addresses = [
+          '1234 Elm Street, Los Angeles, CA 90001',
+          '5678 Maple Avenue, New York, NY 10001',
+          '910 Pine Road, Dallas, TX 75201',
+          '1112 Oak Drive, Chicago, IL 60601'
+        ];
+        const remarks = [
+          '客户电话无人接听，请尽快联系',
+          '收件人要求更改派送时间',
+          '包裹外包装破损，需确认',
+          '收件地址不详，待核实',
+          ''
+        ];
+        const recordCategories = ['退回', '再次派送', '销毁', '上架暂存', '换单重派', '新地址重派', '换渠道重发'];
+        const recordRemarks = [
+          '系统自动识别地址异常并处理',
+          '客服核实后手动提交解决方案',
+          '收件人电话确认后重新派送',
+          '包裹损坏，已与客户协商处理'
+        ];
+        
+        // 重置全局数据
+        orderDataGlobal = [];
+        const statusCount = {};
+        allStatuses.forEach(s => statusCount[s] = 0);
+        
+        for (let i = 1; i <= 48; i++) {
+          const status = allStatuses[i % 2];
+          statusCount[status] = (statusCount[status] || 0) + 1;
+          const order = {
+            id: i,
+            orderNo: `UL455773495YP${String(1000 + i).slice(1)}`,
+            trackingNo: `YWLAX0102234088${String(20 + i).slice(1)}`,
+            workOrderNo: `PR012026090310${12093530 + i}`,
+            warehouse: warehouses[i % 4],
+            status: status,
+            createDate: `2026-08-${String(10 + (i % 18)).padStart(2,'0')}`,
+            abnormalReason: abnormalReasons[i % 3],
+            createWarehouse: createWarehouses[i % 4],
+            createTime: `2026-08-${String(10 + (i % 18)).padStart(2,'0')} ${String(8 + (i % 12)).padStart(2,'0')}:${String((i * 7) % 60).padStart(2,'0')}`,
+            deadlineTime: `2026-09-${String(1 + (i % 18)).padStart(2,'0')} ${String(18 + (i % 5)).padStart(2,'0')}:${String((i * 11) % 60).padStart(2,'0')}`,
+            address: addresses[i % 4],
+            receiverName: receivers[i % 10],
+            receiverPhone: `+1 (213) 555-0${String(i).padStart(2, '0')}`,
+            remark: remarks[i % 5],
+            deliveryCount: 1 + (i % 3)
+          };
+          // 已处理订单生成 5~6 条解决方案记录
+          if (status === '已处理') {
+            const cnt = 5 + (i % 2);
+            order.records = [];
+            for (let k = 0; k < cnt; k++) {
+              order.records.push({
+                category: recordCategories[(i + k) % 7],
+                operator: 'YWE客服',
+                time: `2026-08-${String(12 + (i % 15)).padStart(2,'0')} ${String(8 + k).padStart(2,'0')}:${String((i * 7 + k * 13) % 60).padStart(2,'0')}`,
+                remark: recordRemarks[(i + k) % 4]
+              });
+            }
+          } else {
+            order.records = [];
+          }
+          orderDataGlobal.push(order);
+        }
+
+        // 更新TAB上的数量
+        function updateTabCounts() {
+          const newStatusCount = {};
+          allStatuses.forEach(s => newStatusCount[s] = 0);
+          orderDataGlobal.forEach(item => {
+            if (newStatusCount[item.status] !== undefined) {
+              newStatusCount[item.status]++;
+            }
+          });
+          
+          document.querySelectorAll('.order-tab-item').forEach(btn => {
+            const tabText = btn.textContent.trim();
+            const match = tabText.match(/^([^\s]+)/);
+            if (match) {
+              const statusName = match[1];
+              let count = 0;
+              if (statusName === '全部') {
+                count = orderDataGlobal.length;
+              } else {
+                count = newStatusCount[statusName] || 0;
+              }
+              const countSpan = btn.querySelector('.tab-count');
+              if (countSpan) {
+                countSpan.textContent = `(${count})`;
+              }
+            }
+          });
+        }
+
+        updateTabCounts();
+
+        // 重置搜索参数
+        searchParams = { orderNos: '', startDate: '', endDate: '', createTimeStart: '', createTimeEnd: '' };
+        orderCurrentPageGlobal = 1;
+        orderPageSizeGlobal = 20;
+        orderCurrentFilterGlobal = '待处理';
+        selectedOrderIdsGlobal = new Set();
+
+        // ====== 创建时间日期选择器逻辑（与制单日期一致） ======
+        function initCreateTimeRange() {
+          const display = document.getElementById('createTimeRangeDisplay');
+          const text = document.getElementById('createTimeRangeText');
+          const panel = document.getElementById('createTimeRangePanel');
+          const m1 = document.getElementById('createTimeMonth1');
+          const m2 = document.getElementById('createTimeMonth2');
+          if (!display || !text || !panel || !m1 || !m2) return null;
+
+          let start = new Date('2026-08-08');
+          let end = new Date('2026-08-27');
+          let curMonth = start.getMonth();
+          let curYear = start.getFullYear();
+          let selectingStart = true;
+          let dateSelected = false;
+
+          function fmt(d) {
+            const y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,'0'), day = String(d.getDate()).padStart(2,'0');
+            return `${y}-${m}-${day}`;
+          }
+          function updateText() {
+            const el = document.getElementById('createTimeRangeText');
+            const disp = document.getElementById('createTimeRangeDisplay');
+            if (!el || !disp) return;
+            if (dateSelected) el.textContent = `${fmt(start)} 至 ${fmt(end)}`;
+            else el.textContent = '请选择';
+            disp.classList.toggle('has-date', dateSelected);
+          }
+          function renderMonth(container, year, month) {
+            const first = new Date(year, month, 1).getDay();
+            const days = new Date(year, month+1, 0).getDate();
+            const s = start.getTime(), e = end.getTime();
+            let html = `
+              <div class="dp-header">
+                <button class="dp-nav" data-dir="-1"><i class="fas fa-chevron-left"></i></button>
+                <span>${year}年${month+1}月</span>
+                <button class="dp-nav" data-dir="1"><i class="fas fa-chevron-right"></i></button>
+              </div>
+              <div class="dp-weekdays"><span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span></div>
+              <div class="dp-days">`;
+            for (let i=0; i<first; i++) html += `<div class="dp-day other-month"></div>`;
+            for (let d=1; d<=days; d++) {
+              const date = new Date(year, month, d);
+              const ts = date.getTime();
+              const str = fmt(date);
+              let cls = 'dp-day';
+              if (str === fmt(start) || str === fmt(end)) cls += ' selected';
+              else if (ts > s && ts < e && s < e) cls += ' in-range';
+              html += `<div class="${cls}" data-date="${str}" data-time="${ts}">${d}</div>`;
+            }
+            html += `</div>`;
+            container.innerHTML = html;
+
+            container.querySelectorAll('.dp-nav').forEach(btn => {
+              btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const dir = parseInt(this.dataset.dir);
+                curMonth += dir;
+                if (curMonth < 0) { curMonth = 11; curYear--; }
+                if (curMonth > 11) { curMonth = 0; curYear++; }
+                renderAll();
+              });
+            });
+            container.querySelectorAll('.dp-day:not(.other-month)').forEach(el => {
+              el.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dateSelected = true;
+                const ts = parseInt(this.dataset.time);
+                if (selectingStart) {
+                  start = new Date(ts); end = new Date(ts); selectingStart = false;
+                } else {
+                  if (ts < start.getTime()) { end = start; start = new Date(ts); }
+                  else { end = new Date(ts); }
+                  selectingStart = true;
+                  panel.classList.remove('open');
+                  display.classList.remove('active');
+                }
+                updateText();
+                renderAll();
+              });
+            });
+          }
+          function renderAll() {
+            let m2m = curMonth + 1, y2 = curYear;
+            if (m2m > 11) { m2m = 0; y2++; }
+            renderMonth(m1, curYear, curMonth);
+            renderMonth(m2, y2, m2m);
+          }
+
+          const newDisplay = display.cloneNode(true);
+          display.parentNode.replaceChild(newDisplay, display);
+          const newPanel = document.getElementById('createTimeRangePanel');
+
+          newDisplay.addEventListener('click', function(e) {
+            e.stopPropagation();
+            newPanel.classList.toggle('open');
+            this.classList.toggle('active');
+            if (newPanel.classList.contains('open')) {
+              curYear = start.getFullYear();
+              curMonth = start.getMonth();
+              selectingStart = true;
+              renderAll();
+            }
+          });
+
+          const clearIcon = document.getElementById('createTimeRangeClear');
+          if (clearIcon) {
+            const newClearIcon = clearIcon.cloneNode(true);
+            clearIcon.parentNode.replaceChild(newClearIcon, clearIcon);
+            newClearIcon.addEventListener('click', function(e) {
+              e.stopPropagation();
+              dateSelected = false;
+              searchParams.createTimeStart = '';
+              searchParams.createTimeEnd = '';
+              newPanel.classList.remove('open');
+              newDisplay.classList.remove('active');
+              updateText();
+              renderOrderTable();
+            });
+          }
+
+          document.addEventListener('click', function(e) {
+            if (!newDisplay.parentElement.contains(e.target)) {
+              newPanel.classList.remove('open');
+              newDisplay.classList.remove('active');
+            }
+          });
+
+          updateText();
+          renderAll();
+
+          return {
+            isSelected: () => dateSelected,
+            getStart: () => fmt(start),
+            getEnd: () => fmt(end),
+            reset: () => { dateSelected = false; selectingStart = true; updateText(); }
+          };
+        }
+        const createTimeRange = initCreateTimeRange();
+
+        // ====== 查询/重置按钮 ======
+        const searchBtn = document.getElementById('searchBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        if (searchBtn) {
+          const newSearchBtn = searchBtn.cloneNode(true);
+          searchBtn.parentNode.replaceChild(newSearchBtn, searchBtn);
+          newSearchBtn.addEventListener('click', function() {
+            const orderNosInput = document.getElementById('orderNos');
+            
+            searchParams.orderNos = (orderNosInput?.value || '').trim();
+            if (dateSelected) {
+              searchParams.startDate = fmt(start);
+              searchParams.endDate = fmt(end);
+            } else {
+              searchParams.startDate = '';
+              searchParams.endDate = '';
+            }
+            // 创建时间范围
+            if (createTimeRange && createTimeRange.isSelected()) {
+              searchParams.createTimeStart = createTimeRange.getStart();
+              searchParams.createTimeEnd = createTimeRange.getEnd();
+            } else {
+              searchParams.createTimeStart = '';
+              searchParams.createTimeEnd = '';
+            }
+            
+            console.log('📦 查询参数:', searchParams);
+            orderCurrentPageGlobal = 1;
+            renderOrderTable();
+          });
+        }
+
+        if (resetBtn) {
+          const newResetBtn = resetBtn.cloneNode(true);
+          resetBtn.parentNode.replaceChild(newResetBtn, resetBtn);
+          newResetBtn.addEventListener('click', function() {
+            const orderInput = document.getElementById('orderNos');
+            if (orderInput) orderInput.value = '';
+            dateSelected = false;
+            selectingStart = true;
+            updateText();
+            // 清空创建时间
+            if (createTimeRange) createTimeRange.reset();
+            searchParams = { orderNos: '', startDate: '', endDate: '', createTimeStart: '', createTimeEnd: '' };
+            orderCurrentPageGlobal = 1;
+            renderOrderTable();
+            console.log('🔄 已重置');
+          });
+        }
+
+        updateText();
+        renderAll();
+
+        // =============================================================
+        // ====== 表格核心函数 ======
+        // =============================================================
+
+        function getOrderFilteredData() {
+          let filtered = orderDataGlobal;
+          
+          // 按状态过滤
+          if (orderCurrentFilterGlobal !== '全部') {
+            filtered = filtered.filter(d => d.status === orderCurrentFilterGlobal);
+          }
+          
+          // 按单号查询过滤
+          if (searchParams.orderNos) {
+            const keywords = searchParams.orderNos.split(/[,，\n\s]+/).filter(k => k.trim());
+            if (keywords.length > 0) {
+              filtered = filtered.filter(d => {
+                return keywords.some(k => 
+                  d.orderNo.includes(k) || d.trackingNo.includes(k)
+                );
+              });
+            }
+          }
+          
+          // 按日期范围过滤
+          if (searchParams.startDate && searchParams.endDate) {
+            filtered = filtered.filter(d => {
+              return d.createDate >= searchParams.startDate && d.createDate <= searchParams.endDate;
+            });
+          }
+
+          // 按创建时间范围过滤（按日期部分比较，未选=不过滤）
+          if (searchParams.createTimeStart && searchParams.createTimeEnd) {
+            filtered = filtered.filter(d => {
+              const ct = (d.createTime || '').slice(0, 10);
+              return ct >= searchParams.createTimeStart && ct <= searchParams.createTimeEnd;
+            });
+          }
+          
+          // 排序（制单日期 / 创建时间 / 截止时间 / 异常原因）
+          if (orderSortKeyGlobal) {
+            const dir = orderSortDirGlobal === 'asc' ? 1 : -1;
+            filtered = filtered.slice().sort((a, b) => {
+              const va = a[orderSortKeyGlobal] == null ? '' : String(a[orderSortKeyGlobal]);
+              const vb = b[orderSortKeyGlobal] == null ? '' : String(b[orderSortKeyGlobal]);
+              return va.localeCompare(vb, 'zh-Hans-CN') * dir;
+            });
+          }
+          
+          return filtered;
+        }
+
+        function getOrderTotalPages() {
+          return Math.ceil(orderTotalItemsGlobal / orderPageSizeGlobal) || 1;
+        }
+
+        function getOrderCurrentPageData() {
+          const filtered = getOrderFilteredData();
+          orderTotalItemsGlobal = filtered.length;
+          const totalPages = getOrderTotalPages();
+          if (orderCurrentPageGlobal > totalPages) orderCurrentPageGlobal = totalPages || 1;
+          const start = (orderCurrentPageGlobal - 1) * orderPageSizeGlobal;
+          const end = start + orderPageSizeGlobal;
+          return filtered.slice(start, end);
+        }
+
+        function renderOrderTable() {
+          const pageData = getOrderCurrentPageData();
+          const tbody = document.getElementById('orderTableBody');
+          const thead = document.getElementById('orderTableHead');
+          if (!tbody || !thead) return;
+
+          // 构建表头（所有tab一致）
+          const headers = ['订单号', '运单号', '异常原因', '派送次数', '制单仓', '制单日期', '创建时间', '截止时间', '处理状态', '工单号', '操作'];
+          const sortableMap = {
+            '异常原因': 'abnormalReason',
+            '制单日期': 'createDate',
+            '创建时间': 'createTime',
+            '截止时间': 'deadlineTime'
+          };
+          const thStyle = 'background:#f9fafc; color:#4a5363; font-weight:600; padding:10px 14px; text-align:left; border-bottom:1px solid #e2e6ec; white-space:nowrap;';
+          let headerHtml = '<tr>' + headers.map((h, i) => {
+            const key = sortableMap[h];
+            if (!key) {
+              return `<th${i === headers.length - 1 ? ' class="sticky-right-head"' : ''} style="${thStyle}">${h}</th>`;
+            }
+            const isActive = orderSortKeyGlobal === key;
+            const icon = isActive ? (orderSortDirGlobal === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort';
+            return `<th class="sortable${isActive ? ' sorted' : ''}" data-sort="${key}" style="${thStyle}">${h}<i class="fas ${icon} sort-icon"></i></th>`;
+          }).join('') + '</tr>';
+          thead.innerHTML = headerHtml;
+
+          // 渲染行
+          let bodyHtml = '';
+          if (pageData.length === 0) {
+            bodyHtml = `<tr><td colspan="11" style="text-align:center;padding:40px 0;color:#9aa1ad;">暂无数据</td></tr>`;
+          } else {
+            pageData.forEach(item => {
+              const solJson = JSON.stringify({
+                orderNo: item.orderNo,
+                trackingNo: item.trackingNo,
+                abnormalReason: item.abnormalReason,
+                warehouse: item.warehouse,
+                createDate: item.createDate,
+                createTime: item.createTime,
+                deadlineTime: item.deadlineTime,
+                status: item.status,
+                workOrderNo: item.workOrderNo,
+                deliveryCount: item.deliveryCount,
+                address: item.address,
+                receiverName: item.receiverName,
+                receiverPhone: item.receiverPhone,
+                remark: item.remark
+              }).replace(/"/g, '&quot;');
+              const handled = item.status === '已处理';
+              const solText = handled ? '变更' : '处理';
+              // 指定单号（UL455773495YP001）变更时拦截提示
+              const changeBlocked = handled && item.orderNo === 'UL455773495YP001';
+              const solBtn = changeBlocked
+                ? `<button class="action-btn primary text" onclick="window.showChangeBlockAlert()">${solText}</button>`
+                : `<button class="action-btn primary text" data-sol='${solJson}' onclick="window.openSolutionModal(JSON.parse(this.dataset.sol), ${handled})">${solText}</button>`;
+              bodyHtml += `
+                <tr>
+                  <td>${item.orderNo}</td>
+                  <td>${item.trackingNo}</td>
+                  <td>${item.abnormalReason}</td>
+                  <td>${item.deliveryCount}</td>
+                  <td>${item.warehouse}</td>
+                  <td>${item.createDate}</td>
+                  <td>${item.createTime.slice(0, 10)}</td>
+                  <td>${item.deadlineTime.slice(0, 10)}</td>
+                  <td>${item.status}</td>
+                  <td>${item.workOrderNo}</td>
+                  <td class="sticky-right-cell">
+                    ${solBtn}
+                    ${handled ? `<button class="action-btn primary text" style="margin-left:10px;" onclick="window.openRecordModal('${item.orderNo}')">记录</button>` : ''}
+                  </td>
+                </tr>`;
+            });
+          }
+          tbody.innerHTML = bodyHtml;
+
+          updateOrderPaginationUI();
+          updateTabCounts();
+        }
+
+        // ====== 订单分页器 ======
+        function updateOrderPaginationUI() {
+          const totalPages = getOrderTotalPages();
+          const totalInfo = document.getElementById('orderTotalInfo');
+          const pageBtns = document.getElementById('orderPageBtns');
+          if (totalInfo) totalInfo.textContent = `共 ${orderTotalItemsGlobal} 条`;
+          if (!pageBtns) return;
+
+          let btnHtml = '';
+          btnHtml += `<button class="page-btn" data-page="prev" ${orderCurrentPageGlobal <= 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i></button>`;
+          let startPage = Math.max(1, orderCurrentPageGlobal - 3);
+          let endPage = Math.min(totalPages, startPage + 6);
+          if (endPage - startPage < 6) startPage = Math.max(1, endPage - 6);
+          for (let p = startPage; p <= endPage; p++) {
+            btnHtml += `<button class="page-btn ${p === orderCurrentPageGlobal ? 'active' : ''}" data-page="${p}">${p}</button>`;
+          }
+          btnHtml += `<button class="page-btn" data-page="next" ${orderCurrentPageGlobal >= totalPages ? 'disabled' : ''}><i class="fas fa-chevron-right"></i></button>`;
+          pageBtns.innerHTML = btnHtml;
+
+          pageBtns.querySelectorAll('.page-btn:not([disabled])').forEach(btn => {
+            btn.addEventListener('click', function() {
+              if (this.disabled) return;
+              const p = this.dataset.page;
+              if (p === 'prev' && orderCurrentPageGlobal > 1) { orderCurrentPageGlobal--; renderOrderTable(); }
+              else if (p === 'next' && orderCurrentPageGlobal < totalPages) { orderCurrentPageGlobal++; renderOrderTable(); }
+              else if (!isNaN(p)) { orderCurrentPageGlobal = parseInt(p); renderOrderTable(); }
+            });
+          });
+
+          const gotoInput = document.getElementById('orderGotoInput');
+          if (gotoInput) {
+            gotoInput.value = orderCurrentPageGlobal;
+            gotoInput.max = totalPages || 1;
+          }
+        }
+
+        // ====== 订单TAB切换 ======
+        document.querySelectorAll('.order-tab-item').forEach(btn => {
+          btn.addEventListener('click', function() {
+            document.querySelectorAll('.order-tab-item').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const tabText = this.textContent.trim();
+            const match = tabText.match(/^([^\s]+)/);
+            orderCurrentFilterGlobal = match ? match[1] : '全部';
+            selectedOrderIdsGlobal.clear();
+            orderCurrentPageGlobal = 1;
+            renderOrderTable();
+          });
+        });
+
+        // ====== 表头排序（异常原因/制单日期/创建时间/截止时间） ======
+        const orderThead = document.getElementById('orderTableHead');
+        if (orderThead) {
+          orderThead.addEventListener('click', function(e) {
+            const th = e.target.closest('th.sortable');
+            if (!th) return;
+            const key = th.getAttribute('data-sort');
+            if (!key) return;
+            if (orderSortKeyGlobal === key) {
+              // 同一列：升序 -> 降序 -> 取消排序
+              if (orderSortDirGlobal === 'asc') {
+                orderSortDirGlobal = 'desc';
+              } else {
+                orderSortKeyGlobal = '';
+                orderSortDirGlobal = 'asc';
+              }
+            } else {
+              orderSortKeyGlobal = key;
+              orderSortDirGlobal = 'asc';
+            }
+            orderCurrentPageGlobal = 1;
+            renderOrderTable();
+          });
+        }
+
+        // ====== 分页器事件绑定 ======
+        const pageSizeSelect = document.getElementById('orderPageSizeSelect');
+        if (pageSizeSelect) {
+          pageSizeSelect.addEventListener('change', function() {
+            orderPageSizeGlobal = parseInt(this.value);
+            orderCurrentPageGlobal = 1;
+            selectedOrderIdsGlobal.clear();
+            renderOrderTable();
+          });
+        }
+
+        const gotoBtn = document.getElementById('orderGotoBtn');
+        const gotoInput = document.getElementById('orderGotoInput');
+        if (gotoBtn && gotoInput) {
+          gotoBtn.addEventListener('click', function() {
+            const val = parseInt(gotoInput.value);
+            const totalPages = getOrderTotalPages();
+            if (!isNaN(val) && val >= 1 && val <= totalPages) {
+              orderCurrentPageGlobal = val;
+              selectedOrderIdsGlobal.clear();
+              renderOrderTable();
+            } else {
+              alert(`请输入 1 ~ ${totalPages} 之间的页码`);
+            }
+          });
+          gotoInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') gotoBtn.click();
+          });
+        }
+
+        // ====== 初始化渲染 ======
+        renderOrderTable();
+        console.log('✅ 订单管理表格已加载（POD弹窗修复版）');
+      }
+
+      // ============================================================
+      // 左侧菜单点击
+      // ============================================================
+      document.querySelectorAll('.menu-item.selectable').forEach(el => {
+        el.addEventListener('click', function(e) {
+          e.preventDefault();
+          const menuName = this.dataset.menu || this.querySelector('.menu-label')?.textContent.trim();
+          if (!menuName) return;
+          document.querySelectorAll('.menu-item, .sub-menu-item').forEach(item => item.classList.remove('active'));
+          this.classList.add('active');
+          openTab(menuName);
+        });
+      });
+
+      document.querySelectorAll('.sub-menu-item').forEach(el => {
+        el.addEventListener('click', function(e) {
+          e.preventDefault();
+          const menuName = this.dataset.menu || this.querySelector('.sub-label')?.textContent.trim();
+          if (!menuName) return;
+          document.querySelectorAll('.menu-item, .sub-menu-item').forEach(item => item.classList.remove('active'));
+          this.classList.add('active');
+          openTab(menuName);
+        });
+      });
+
+      // ============================================================
+      // 初始化 - 默认打开异常单管理
+      // ============================================================
+      const defaultHomeTab = document.querySelector('.tab-item.home-tab');
+      if (defaultHomeTab) {
+        // 默认打开异常单管理
+        openTab('异常单管理');
+      } else {
+        createHomeTab();
+      }
+    })();
+  </script>
+</body>
+</html>
